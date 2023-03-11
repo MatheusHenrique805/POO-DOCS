@@ -2,28 +2,37 @@ from datetime import *
 #Criação da classe consulta.
 class consulta:
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
-    def _init_(self, data, codigo, nome_medico, nome_paciente, area_medica,  preco):
+    def __init__(self, data, codigo, nome_medico, nome_paciente, area_medica,  preco):
         self.data = data
+        self.codigo = codigo
         self.nome_medico = nome_medico
         self.nome_paciente = nome_paciente
         self.area_medica = area_medica
         self.preco = preco
-        self.codigo = codigo 
-    def str(self):
+         
+    def __str__(self):
         pass
-        
+    
+    def data_consulta(self, data):
+        self.data = data
     def cod_consulta(self):
-        self.cod_consulta += 1 
+        self.codigo += 1 
     def nome_pacient(self, nome_paci):
         self.nome_paciente = nome_paci
     def nome_medi(self, nome_med):
         self.nome_medico = nome_med
     def area(self, area_med):
         self.area_medica = area_med
+    def preco_cons(self):
+        self.preco = 200.00
+   
+    
+        
    
 #Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
 #Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
 #FEITO
+consult = consulta('', 0,'', '','', 0.0)
 def menu():
     while True:
         try:
@@ -78,7 +87,8 @@ def criar_consulta():
             break
         except:
             print('Houve um erro. Por favor, preencha os campos novamente.')
-
+            
+    return data, nome, area_med, nome_med
 def main():
     
     lista_consultas = []
@@ -86,7 +96,11 @@ def main():
         try:
             r = menu()
             if r == 1:
-                criar_consulta()
+                data, nome, area_med, nome_med = criar_consulta()
+                cod = consult.cod_consulta()
+                preco = consult.preco_cons()
+                lista_consultas.append(consulta(data, cod, nome_med, nome, area_med, preco))
+                print(f'{lista_consultas}')
         except:
             print('Erro.')
             
