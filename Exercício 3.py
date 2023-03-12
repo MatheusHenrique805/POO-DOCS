@@ -1,7 +1,7 @@
 from datetime import *
 #Criação da classe consulta.
 class consulta:
-    cod_consultaAtual = 1#importante
+    cod_consultaAtual = 0#importante
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
     def __init__(self, data, nome_paciente,  area_medica, nome_medico,  preco):
         self.codigo = consulta.cod_consultaAtual
@@ -14,7 +14,7 @@ class consulta:
         
         
     def __str__(self):
-        return f'Consulta {self.codigo}: {self.nome_paciente} - {self.area_medica} ({self.nome_medico}) - {self.data}'
+        return f'Cod: {self.codigo}\nData da consulta:{self.data}\nNome do paciente: {self.nome_paciente}\nEsp.medica: {self.area_medica}({self.nome_medico})\nPreço da consulta: R$ {self.preco}'
         
         
     def cod_consulta(self):
@@ -29,6 +29,7 @@ class consulta:
 #Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
 #Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
 #FEITO
+consulta('', '', '', '', 200.00)
 def menu():
     while True:
         try:
@@ -44,7 +45,7 @@ def menu():
     return resp 
 
 #Dicionario com as áreas disponivel para consulta e seus medicos.
-#FEITO?
+#FEITO
 def areas_med(esc):
     dic_areamed = {}
     dic_areamed['Pediatria'] = 'Arnaldo'
@@ -67,7 +68,7 @@ def escolher_data():
     fds = [5, 6]
     d = datetime.strptime(input("Data da consulta: "),"%d/%m/%Y").date()
     if d <= date.today() or d.weekday() in fds:
-            raise ValueError("Data de consulta menor que data atual.")
+        raise ValueError("Data de consulta menor que data atual.")
     else:
         data = d.strftime("%d/%m/%Y")
     return data
@@ -80,32 +81,30 @@ def criar_consulta(l, dc):
             area = int(input('Para qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
             area_med, nome_med = areas_med(area) 
             preco = 300
-            l.append(consulta(data, nome, area_med, nome_med, preco))
+            l = [data, nome, area_med, nome_med, preco]
             consulta_atual = l[-1]
             dc[consulta.cod_consultaAtual] = l 
             print(consulta_atual)
             break
         except:
             print('Houve um erro. Por favor, preencha os campos novamente.')
+    
+    return dc
 
 def main():
-    dic_colsutas = {}
+    dic_consultas = {}
     lista_consultas = []
     while True:
         try:
             r = menu()
             if r == 1:
-                criar_consulta(lista_consultas, dic_colsutas)
-            if r ==  2:
-                for key in dic_colsutas:
-                    print(key)
-                    for item in key:
-                        print(item)
-                    
-                
+               dic_consultas = criar_consulta(lista_consultas, dic_consultas)
+            if r == 2:
+                for key in dic_consultas:
+                    print(f'{dic_consultas.get(key)}')
         except:
             print('Erro.')
             
         
 if __name__ == '__main__':
-        main()
+    main()
