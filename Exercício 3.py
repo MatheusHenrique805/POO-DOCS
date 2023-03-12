@@ -1,11 +1,13 @@
 from datetime import *
+from time import sleep
 #Criação da classe consulta.
 class consulta:
-    cod_consultaAtual = 0#importante
+    cod_consultaAtual = 1#importante
+    estado = False
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
     def __init__(self, data, nome_paciente,  area_medica, nome_medico,  preco):
         self.codigo = consulta.cod_consultaAtual
-        consulta.cod_consultaAtual +=1
+        consulta.cod_consultaAtual += 1
         self.data = data#importante
         self.nome_paciente = nome_paciente#importante
         self.area_medica = area_medica#importante
@@ -14,22 +16,17 @@ class consulta:
         
         
     def __str__(self):
-        return f'Cod: {self.codigo}\nData da consulta:{self.data}\nNome do paciente: {self.nome_paciente}\nEsp.medica: {self.area_medica}({self.nome_medico})\nPreço da consulta: R$ {self.preco}'
-        
-        
-    def cod_consulta(self):
-        self.codigo += 1 
-    def nome_pacient(self, nome_paci):
-        self.nome_paciente = nome_paci
-    def nome_medi(self, nome_med):
-        self.nome_medico = nome_med
-    def area(self, area_med):
-        self.area_medica = area_med
-   
+        return f'\nCódigo da consulta: {self.codigo}\nData da consulta: {self.data}\nNome do paciente: {self.nome_paciente}\nÁrea: {self.area_medica}\nMedico(a){self.nome_medico}\nPreço da consulta: R$ {self.preco}'
+    def __repr__(self) -> str:
+        return f'Data da consulta:{self.data}\nNome do paciente: {self.nome_paciente}\nEsp.medica: {self.area_medica}({self.nome_medico})\nPreço da consulta: R$ {self.preco} \nSituação do pagamento: {self.estado}'
+    
+    #Metodos da classe.
+    def pagar_consulta(self):
+        self.estado = True
+           
 #Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
 #Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
 #FEITO
-consulta('', '', '', '', 200.00)
 def menu():
     while True:
         try:
@@ -73,35 +70,68 @@ def escolher_data():
         data = d.strftime("%d/%m/%Y")
     return data
     
-def criar_consulta(l, dc):
+def criar_consulta(dc, ):
     while True:
         try:
+            #Preechimento dos dados da consulta.
             data = escolher_data()
             nome = input('Nome do paciente: ')
-            area = int(input('Para qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
+            print('_'*55)
+            area = int(input('\nPara qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
             area_med, nome_med = areas_med(area) 
             preco = 300
-            l = [data, nome, area_med, nome_med, preco]
-            consulta_atual = l[-1]
-            dc[consulta.cod_consultaAtual] = l 
-            print(consulta_atual)
+            #Criação do objeto consulta e implementação num dicionario.
+            nova_consulta = consulta(data, nome, area_med, nome_med, preco)
+            nova_consulta_lista = [nova_consulta]  
+            print(nova_consulta)
+            dc[nova_consulta.codigo] = nova_consulta_lista
             break
         except:
             print('Houve um erro. Por favor, preencha os campos novamente.')
     
     return dc
 
+def pagamento(d):
+    while True:
+        try:    
+            cod = int(input('Digite o código da Consulta: '))
+            if cod in d.keys():
+                cons = d[cod]
+                if cons[0].estado == True:
+                    print('A Consulta já está paga.')
+                    break
+                else:
+                    print('O valor da Consulta é de R$ 300,00.')
+                    try:
+                        sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]? ').upper()  
+                        if sit == 'S':
+                            cons[0].pagar_consulta()
+                            sleep(1)
+                            print('-'*20,'CONSULTA PAGA', '-'*20)
+                            break
+                        if sit == 'N':
+                            print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
+                            sleep(1)
+                            break
+                    except:
+                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
+            else:
+                pass
+        except:
+            print('Código inválido. Tente novamente.', end=' ')
+
 def main():
     dic_consultas = {}
-    lista_consultas = []
     while True:
         try:
             r = menu()
+            #Criação da nova consulta
             if r == 1:
-               dic_consultas = criar_consulta(lista_consultas, dic_consultas)
+               dic_consultas = criar_consulta(dic_consultas)
+            #quero imprimir os valores do objeto, mas ta imprimindo o local do armazenamento do objeto
             if r == 2:
-                for key in dic_consultas:
-                    print(f'{dic_consultas.get(key)}')
+                pagamento(dic_consultas)
+                
         except:
             print('Erro.')
             
