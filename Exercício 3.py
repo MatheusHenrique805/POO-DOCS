@@ -3,7 +3,7 @@ from time import sleep
 #Criação da classe consulta.
 class consulta:
     cod_consultaAtual = 1#importante
-    estado = False
+    estado = False#importante       
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
     def __init__(self, data, nome_paciente,  area_medica, nome_medico,  preco):
         self.codigo = consulta.cod_consultaAtual
@@ -12,7 +12,7 @@ class consulta:
         self.nome_paciente = nome_paciente#importante
         self.area_medica = area_medica#importante
         self.nome_medico = nome_medico#importante
-        self.preco = preco#importante
+        self.preco = preco#importante       
         
         
     def __str__(self):
@@ -22,8 +22,16 @@ class consulta:
     
     #Metodos da classe.
     def pagar_consulta(self):
-        self.estado = True
-           
+        self.estado = True 
+        
+def mostrar_consultas(d):
+    print('-'*20, 'CONSULTAS','-'*20)
+    for codigo, consulta in d.items():
+        print(consulta[0].nome_medico)
+        print('_'*55)
+        print(f'Consulta {codigo}: \n{consulta}\n')
+        print('_'*55)
+             
 #Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
 #Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
 #FEITO
@@ -69,8 +77,9 @@ def escolher_data():
     else:
         data = d.strftime("%d/%m/%Y")
     return data
-    
-def criar_consulta(dc, ):
+
+#Cria o objeto nova_consulta, inseri ele dentro de uma lista que é implementada num dicionário.
+def criar_consulta(dc):
     while True:
         try:
             #Preechimento dos dados da consulta.
@@ -88,53 +97,56 @@ def criar_consulta(dc, ):
             break
         except:
             print('Houve um erro. Por favor, preencha os campos novamente.')
-    
     return dc
 
+#Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
 def pagamento(d):
-    while True:
-        try:    
-            cod = int(input('Digite o código da Consulta: '))
-            if cod in d.keys():
-                cons = d[cod]
-                if cons[0].estado == True:
-                    print('A Consulta já está paga.')
-                    break
-                else:
-                    print('O valor da Consulta é de R$ 300,00.')
-                    try:
-                        sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]? ').upper()  
-                        if sit == 'S':
-                            cons[0].pagar_consulta()
-                            sleep(1)
-                            print('-'*20,'CONSULTA PAGA', '-'*20)
-                            break
-                        if sit == 'N':
-                            print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
-                            sleep(1)
-                            break
-                    except:
-                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
+    while True:        
+        cod = int(input('Digite o código da Consulta: '))
+        if cod in d.keys():
+            cons = d[cod]
+            if cons[0].estado == True:
+                print('A Consulta já está paga.')
+                break
             else:
-                pass
-        except:
-            print('Código inválido. Tente novamente.', end=' ')
+                print('O valor da Consulta é de R$ 300,00.')
+                while True:  
+                    sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]? ').upper()  
+                    if sit == 'S':
+                        cons[0].pagar_consulta()
+                        sleep(1)
+                        print('-'*20,'CONSULTA PAGA', '-'*20)
+                        break
+                    elif sit == 'N':
+                        print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
+                        sleep(1)
+                        break
+                    else:
+                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
+            break
+        else:
+            print('Código inválido. Tente novamente.', end=' ')            
 
+        
 def main():
     dic_consultas = {}
     while True:
-        try:
-            r = menu()
-            #Criação da nova consulta
-            if r == 1:
-               dic_consultas = criar_consulta(dic_consultas)
-            #quero imprimir os valores do objeto, mas ta imprimindo o local do armazenamento do objeto
-            if r == 2:
-                pagamento(dic_consultas)
-                
-        except:
-            print('Erro.')
+        r = menu()
+        #Criação da nova consulta(FEITO).
+        if r == 1:
+            dic_consultas = criar_consulta(dic_consultas)
+        #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
+        if r == 2:
+            pagamento(dic_consultas)
             
+        if r == 3:
+            mostrar_consultas(dic_consultas)
         
+        
+        if r == 6:
+            pass
+                
+        
+            
 if __name__ == '__main__':
     main()
