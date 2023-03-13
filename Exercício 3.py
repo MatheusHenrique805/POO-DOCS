@@ -160,12 +160,10 @@ def main():
             consultas = criar_consulta(dic_consultas)
         #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
         if r == 2:
-            consultas =  pagamento(consultas)
-            print(consultas)
+            pagamento(consultas)
         #Cancelamento da consulta(FEITA).
         if r == 3:
-            cancelar_consulta(consultas)
-            print(consultas)
+            consultas = cancelar_consulta(consultas)
         if r == 4:
             agendar_retorno()
         if r == 5:
