@@ -24,31 +24,65 @@ class consulta:
     def pagar_consulta(self):
         self.estado = True 
         
-def mostrar_consultas(d):
-    print('-'*20, 'CONSULTAS','-'*20)
-    for codigo, consulta in d.items():
-        print(consulta[0].nome_medico)
-        print('_'*55)
-        print(f'Consulta {codigo}: \n{consulta}\n')
-        print('_'*55)
-             
-#Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
-#Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
-#FEITO
-def menu():
+        
+def agendar_retorno():
+    pass   
+def cancelar_consulta(d):
     while True:
         try:
-            print('_' *55)
-            print('1 - Nova consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês')
-            print('_' *55)
-            #Verifica se ação do usuário está nas opções citadas a cima.
-            resp = int(input('>>> '))
-            if resp > 0 and resp < 7:
-                break
+            cod = int(input('Digite o código da consulta deseja.\n'))
+            print('-'*20, 'CONSULTA','-'*20)
+            for codigo, consulta in d.items():
+                if cod == codigo:
+                    print(consulta[0].nome_medico)
+                    print('_'*55)
+                    print(f'Consulta {codigo}: \n{consulta}\n')
+                    print('_'*55)
+                    esc = input('Deseja cancelar essa consulta?(S-Sim/N-Não)\n').upper()[0]
+                    if esc == 'S':
+                        del d[codigo]
+                        print('Sua consulta foi cancelada')
+                        break
+                    elif esc == 'N':
+                        pass
+                    else:
+                        raise ValueError('Opção não válida')
+                else:
+                    pass
+            break
         except:
-            print('Ação não encontrada. Tente novamente.')
-    return resp 
+            print( 'Só aceita números inteiros como respostas')
+    
+    return d
+             
 
+#Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
+def pagamento(d):
+    while True:        
+        cod = int(input('Digite o código da Consulta.\n'))
+        if cod in d.keys():
+            cons = d[cod]
+            if cons[0].estado == True:
+                print('A Consulta já está paga.')
+                break
+            else:
+                print('O valor da Consulta é de R$ 300,00.')
+                while True:  
+                    sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]?\n').upper()  
+                    if sit == 'S':
+                        cons[0].pagar_consulta()
+                        sleep(1)
+                        print('-'*20,'CONSULTA PAGA', '-'*20)
+                        break
+                    elif sit == 'N':
+                        print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
+                        sleep(1)
+                        break
+                    else:
+                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
+            break
+        else:
+            print('Código inválido. Tente novamente.', end=' ')
 #Dicionario com as áreas disponivel para consulta e seus medicos.
 #FEITO
 def areas_med(esc):
@@ -67,7 +101,7 @@ def areas_med(esc):
                 cont += 1
     
     return areamed, nomemedic
-
+            
 #Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
 def escolher_data():
     fds = [5, 6]
@@ -77,14 +111,14 @@ def escolher_data():
     else:
         data = d.strftime("%d/%m/%Y")
     return data
-
+                        
 #Cria o objeto nova_consulta, inseri ele dentro de uma lista que é implementada num dicionário.
 def criar_consulta(dc):
     while True:
         try:
             #Preechimento dos dados da consulta.
             data = escolher_data()
-            nome = input('Nome do paciente: ')
+            nome = input('Nome completo do paciente: ')
             print('_'*55)
             area = int(input('\nPara qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
             area_med, nome_med = areas_med(area) 
@@ -99,33 +133,22 @@ def criar_consulta(dc):
             print('Houve um erro. Por favor, preencha os campos novamente.')
     return dc
 
-#Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
-def pagamento(d):
-    while True:        
-        cod = int(input('Digite o código da Consulta: '))
-        if cod in d.keys():
-            cons = d[cod]
-            if cons[0].estado == True:
-                print('A Consulta já está paga.')
+#Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
+#Criar um arquivo .py para guardar o menu seria melhor, deixaria o principal mais limpo.
+#FEITO
+def menu():
+    while True:
+        try:
+            print('_' *55)
+            print('1 - Nova consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês')
+            print('_' *55)
+            #Verifica se ação do usuário está nas opções citadas a cima.
+            resp = int(input('>>> '))
+            if resp > 0 and resp < 7:
                 break
-            else:
-                print('O valor da Consulta é de R$ 300,00.')
-                while True:  
-                    sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]? ').upper()  
-                    if sit == 'S':
-                        cons[0].pagar_consulta()
-                        sleep(1)
-                        print('-'*20,'CONSULTA PAGA', '-'*20)
-                        break
-                    elif sit == 'N':
-                        print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
-                        sleep(1)
-                        break
-                    else:
-                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
-            break
-        else:
-            print('Código inválido. Tente novamente.', end=' ')            
+        except:
+            print('Ação não encontrada. Tente novamente.')
+    return resp 
 
         
 def main():
@@ -134,19 +157,21 @@ def main():
         r = menu()
         #Criação da nova consulta(FEITO).
         if r == 1:
-            dic_consultas = criar_consulta(dic_consultas)
+            consultas = criar_consulta(dic_consultas)
         #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
         if r == 2:
-            pagamento(dic_consultas)
-            
+            consultas =  pagamento(consultas)
+            print(consultas)
+        #Cancelamento da consulta(FEITA).
         if r == 3:
-            mostrar_consultas(dic_consultas)
-        
-        
+            cancelar_consulta(consultas)
+            print(consultas)
+        if r == 4:
+            agendar_retorno()
+        if r == 5:
+            pass   
         if r == 6:
             pass
                 
-        
-            
 if __name__ == '__main__':
     main()
