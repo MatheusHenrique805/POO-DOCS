@@ -78,12 +78,17 @@ def areas_med(esc):
 
 #Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
 def escolher_data():
-    fds = [5, 6]
-    d = datetime.strptime(input("Data da consulta: "),"%d/%m/%Y").date()
-    if d <= date.today() or d.weekday() in fds:
-        raise ValueError("Data de consulta menor que data atual.")
-    else:
-        data = d.strftime("%d/%m/%Y")
+        fds = [5, 6]
+    while True:
+        try:
+            d = datetime.strptime(input("Data da consulta/Retorno:\n"),"%d/%m/%Y").date()
+            if d <= date.today() or d.weekday() in fds:
+                raise ValueError("Data de consulta menor que data atual.")
+            else:
+                data = d.strftime("%d/%m/%Y")
+        except:
+            print('Digite a data desse modo dd/mm/aa!!')
+            
     return data
 
 #Cria o objeto nova_consulta, inseri ele dentro de uma lista que é implementada num dicionário.
@@ -108,32 +113,37 @@ def criar_consulta(dc):
 
 #Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
 def pagamento(d):
-    while True:        
-        cod = int(input('Digite o código da Consulta: '))
-        if cod in d.keys():
-            cons = d[cod]
-            if cons[0].estado == True:
-                print('A Consulta já está paga.')
+    while True:
+        try:        
+            cod = int(input('Digite o código da Consulta.\n'))
+            if cod in d.keys():
+                cons = d[cod]
+                if cons[0].estado == True:
+                    print('A Consulta já está paga.')
+                    break
+                else:
+                    print('O valor da Consulta é de R$ 300,00.')
+                    while True:
+                        try:  
+                            sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]?\n').upper()  
+                            if sit == 'S':
+                                cons[0].pagar_consulta()
+                                sleep(1)
+                                print('-'*20,'CONSULTA PAGA', '-'*20)
+                                break
+                            elif sit == 'N':
+                                print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
+                                sleep(1)
+                                break
+                            else:
+                                raise ValueError('Digite uma das opções disponíveis!')
+                        except:
+                            print('As opções disponíveis são "S" e "N".')
                 break
             else:
-                print('O valor da Consulta é de R$ 300,00.')
-                while True:  
-                    sit = input('Deseja pagar a consulta agora [S - Sim/N - Não]? ').upper()  
-                    if sit == 'S':
-                        # "cons[0]" é o objeto referente ao codigo.
-                        cons[0].pagar_consulta()
-                        sleep(1)
-                        print('-'*20,'CONSULTA PAGA', '-'*20)
-                        break
-                    elif sit == 'N':
-                        print('Lembre-se que para poder se consultar você tem que efetuar o pagamento')
-                        sleep(1)
-                        break
-                    else:
-                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
-            break
-        else:
-            print('Código inválido. Tente novamente.', end=' ')   
+                raise ValueError('Código não encontrado', end=' ')
+        except:
+            print('Verifique se eese é realmente o código correto.')   
 
 #Cancela a consulta / OBS: seria bom implenentar mais prevenções de erro.
 def cancelar_consulta(d):
@@ -162,7 +172,6 @@ def cancelar_consulta(d):
                         break
                     else:
                         print('Resposta inválida. Por favor, digite uma das opções oferecidas.', end=' ')
-                    
                 break
             else:
                 print('Código da consulta não encontrado. Tente novamente.', end=' ') 
