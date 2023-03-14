@@ -31,17 +31,15 @@ class consulta:
             return True
         else:
             return False
-
         
-
-            
 def mostrar_consultas(d):
     print('-'*20, 'CONSULTAS','-'*20)
     for codigo, consulta in d.items():
         print(consulta[0].nome_medico)
         print('_'*55)
         print(f'Consulta {codigo}: \n{consulta}\n')
-        print('_'*55)            
+        print('_'*55)
+             
 #Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
 #Criar um arquivo .py para guardar o menu e as outras funções seria melhor, deixaria o principal mais limpo.
 #FEITO
@@ -58,6 +56,7 @@ def menu():
         except:
             print('Ação não encontrada. Tente novamente.')
     return resp 
+
 #Dicionario com as áreas disponivel para consulta e seus medicos.
 #FEITO
 def areas_med(esc):
@@ -75,7 +74,7 @@ def areas_med(esc):
             else:
                 cont += 1
     
-    return areamed, nomemedic
+    return nomemedic, areamed 
 
 #Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
 def escolher_data():
@@ -96,7 +95,7 @@ def criar_consulta(dc):
             nome = input('Nome do paciente: ')
             print('_'*55)
             area = int(input('\nPara qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
-            area_med, nome_med = areas_med(area) 
+            nome_med, area_med = areas_med(area) 
             preco = 300
             #Criação do objeto consulta e implementação num dicionario.
             nova_consulta = consulta(data, nome, area_med, nome_med, preco)
@@ -149,7 +148,7 @@ def cancelar_consulta(d):
                 while True:
                     r = input('Deseja cancelar essa consulta[S - Sim/N - Não]? ').upper()
                     if r == 'S':
-                        r2 = input('A consulta será cancelada. Deseja continua[S - Sim/N - Não]?').upper()
+                        r2 = input('A consulta será cancelada. Deseja continuar[S - Sim/N - Não]? ').upper()
                         if r2 == 'S':
                             del d[codigo]
                             sleep(1)
@@ -169,36 +168,6 @@ def cancelar_consulta(d):
         except ValueError:
             print('Por favor, digite um valor númerico.', end=' ')
             
-def relatorioConsultas(d):
-    cont = 1
-    for codigo, consulta in d.items():
-        
-        print('_'*55)
-        print(' '*19 ,consulta[0].nome_medico)
-        if consulta[0].nome_medico == 'Arnaldo':
-            
-            print('_'*55)
-            print(f'Consulta {codigo}: \n{consulta}\n')
-            print('_'*55)
-        print(f'Consultas realizas: {cont}')
-        cont += 1
-    for codigo, consulta in d.items():
-        if consulta[0].nome_medico == 'Laura':
-            print('_'*55)
-            print(f'Consulta {codigo}: \n{consulta}\n')
-            print('_'*55)
-    for codigo, consulta in d.items():
-        if consulta[0].nome_medico == 'Jonas':
-            print('_'*55)
-            print(f'Consulta {codigo}: \n{consulta}\n')
-            print('_'*55)
-    for codigo, consulta in d.items():
-        if consulta[0].nome_medico == 'Carlos':
-            print('_'*55)
-            print(f'Consulta {codigo}: \n{consulta}\n')
-            print('_'*55)
-    pass
-
 def agendar_retorno(ret,d):
     while True:
         try:
@@ -221,11 +190,26 @@ def agendar_retorno(ret,d):
                     pass
             break
         except:
-            print('Erro na digitação do código da consulta!!')
+            print('Erro na digitação do código da consulta!!')   
+                     
+def relatorioConsultas(d):
+    cont = 0
+    esc = int(input('Medico: \n1-Arnaldo \n2-Laura \n3-Jonas \n4-Carlos\n>>>'))
+    medico, area = areas_med(esc)
+    for cod, cons in d.items():
+        if cont == 0:
+            print('_'*55)
+            print(' '*19,f'{medico} ({area})')
+        if cons[0].nome_medico == medico:
+            print('_'*55)
+            print(f'Consulta {cod}: \n{cons}\n')
+            print('_'*55)
+            cont += 1
+    print(f'Número de consulas realidas: {cont}') 
 
-            
 def main():
     dic_consultas = {}
+    dic_retorno = {}
     while True:
         r = menu()
         #Criação da nova consulta(FEITO).
@@ -234,12 +218,13 @@ def main():
         #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
         if r == 2:
             pagamento(dic_consultas)
-        #Cancela a consulta desejada, usando o codigo dela.(FEITA)
+        #Cancela a consulta desejada, usando o codigo dela.
         if r == 3:
             cancelar_consulta(dic_consultas)
-        #Agendar o retorno.(fEITA)       
+        #Agendar o retorno.        
         if r == 4:
-            agendar_retorno(ret,d)
+            agendar_retorno(dic_consultas,dic_consultas)
+            pass
         #Relatório de consultas realizadas no mes por médico
         if r == 5:
             relatorioConsultas(dic_consultas)
