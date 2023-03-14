@@ -135,6 +135,7 @@ def pagamento(d):
         else:
             print('Código inválido. Tente novamente.', end=' ')   
 
+#Cancela a consulta / OBS: seria bom implenentar mais prevenções de erro.
 def cancelar_consulta(d):
     while True:
         try:
@@ -167,7 +168,8 @@ def cancelar_consulta(d):
                 print('Código da consulta não encontrado. Tente novamente.', end=' ') 
         except ValueError:
             print('Por favor, digite um valor númerico.', end=' ')
-            
+
+#Agenda o retorno, limitando em até 30 dias após a última consulta.
 def agendar_retorno(ret,d):
     while True:
         try:
@@ -191,21 +193,22 @@ def agendar_retorno(ret,d):
             break
         except:
             print('Erro na digitação do código da consulta!!')   
-                     
+
+#Escolhe um dos medicos e mostra as consultas realizadas por ele e quantas foram. / OBS: implementar prevenções de erro e aprimorar mais.
 def relatorioConsultas(d):
     cont = 0
     esc = int(input('Medico: \n1-Arnaldo \n2-Laura \n3-Jonas \n4-Carlos\n>>>'))
     medico, area = areas_med(esc)
+    if cont == 0:
+        print('_'*55)
+        print(' '*19,f'{medico.upper()} ({area.upper()})')
     for cod, cons in d.items():
-        if cont == 0:
-            print('_'*55)
-            print(' '*19,f'{medico} ({area})')
         if cons[0].nome_medico == medico:
             print('_'*55)
             print(f'Consulta {cod}: \n{cons}\n')
             print('_'*55)
             cont += 1
-    print(f'Número de consulas realidas: {cont}') 
+    print(f'Número de consulas realizadas: {cont}') 
 
 def main():
     dic_consultas = {}
@@ -215,7 +218,7 @@ def main():
         #Criação da nova consulta(FEITO).
         if r == 1:
             criar_consulta(dic_consultas)
-        #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
+        #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITO).
         if r == 2:
             pagamento(dic_consultas)
         #Cancela a consulta desejada, usando o codigo dela.
