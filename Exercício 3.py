@@ -3,7 +3,9 @@ from time import sleep
 #Criação da classe consulta.
 class consulta:
     cod_consultaAtual = 1#importante
-    estado = False#importante       
+    estado = False#importante
+    quantidade_consultas = 0
+    faturamento = 0
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
     def __init__(self, data, nome_paciente,  area_medica, nome_medico,  preco):
         self.codigo = consulta.cod_consultaAtual
@@ -22,7 +24,13 @@ class consulta:
     
     #Metodos da classe.
     def pagar_consulta(self):
-        self.estado = True 
+        if not self.estado:
+            self.estado = True 
+            consulta.quantidade_consultas += 1
+            consulta.faturamento += 100.00
+            return True
+        else:
+            return False
         
 def mostrar_consultas(d):
     print('-'*20, 'CONSULTAS','-'*20)
@@ -97,7 +105,6 @@ def criar_consulta(dc):
             break
         except:
             print('Houve um erro. Por favor, preencha os campos novamente.')
-    return dc
 
 #Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
 def pagamento(d):
@@ -126,7 +133,7 @@ def pagamento(d):
                         print('Resposta inválida. Por favor, digite uma das opções oferecidas.')
             break
         else:
-            print('Código inválido. Tente novamente.', end=' ')            
+            print('Código inválido. Tente novamente.', end=' ')   
 
 def cancelar_consulta(d):
     while True:
@@ -160,14 +167,44 @@ def cancelar_consulta(d):
                 print('Código da consulta não encontrado. Tente novamente.', end=' ') 
         except ValueError:
             print('Por favor, digite um valor númerico.', end=' ')
-    
+            
+def relatorioConsultas(d):
+    cont = 1
+    for codigo, consulta in d.items():
+        
+        print('_'*55)
+        print(' '*19 ,consulta[0].nome_medico)
+        if consulta[0].nome_medico == 'Arnaldo':
+            
+            print('_'*55)
+            print(f'Consulta {codigo}: \n{consulta}\n')
+            print('_'*55)
+        print(f'Consultas realizas: {cont}')
+        cont += 1
+    for codigo, consulta in d.items():
+        if consulta[0].nome_medico == 'Laura':
+            print('_'*55)
+            print(f'Consulta {codigo}: \n{consulta}\n')
+            print('_'*55)
+    for codigo, consulta in d.items():
+        if consulta[0].nome_medico == 'Jonas':
+            print('_'*55)
+            print(f'Consulta {codigo}: \n{consulta}\n')
+            print('_'*55)
+    for codigo, consulta in d.items():
+        if consulta[0].nome_medico == 'Carlos':
+            print('_'*55)
+            print(f'Consulta {codigo}: \n{consulta}\n')
+            print('_'*55)
+    pass
+
 def main():
     dic_consultas = {}
     while True:
         r = menu()
         #Criação da nova consulta(FEITO).
         if r == 1:
-            dic_consultas = criar_consulta(dic_consultas)
+            criar_consulta(dic_consultas)
         #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITA).
         if r == 2:
             pagamento(dic_consultas)
@@ -177,9 +214,9 @@ def main():
         #Agendar o retorno.        
         if r == 4:
             pass
-    
+        #Relatório de consultas realizadas no mes por médico
         if r == 5:
-            
+            relatorioConsultas(dic_consultas)
             pass
         if r == 6:
             mostrar_consultas(dic_consultas)
