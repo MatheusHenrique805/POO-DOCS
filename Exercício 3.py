@@ -33,29 +33,6 @@ class consulta:
             return False
 
         
-def agendar_retorno(ret,d):
-    while True:
-        try:
-            cod = int(input('Digite o código da consulta.\n'))
-            for codigo, consult in d.items():
-                if cod == codigo:
-                    data_retorno = escolher_data()
-                    data_con_passada = datetime.strptime(consult[0].data, '%d/%m/%Y').date()
-                    consult[0].data = data_retorno
-                    preco = 0
-                    if date.today() <= data_con_passada + timedelta(days=30):
-                        retorno = consulta(consult[0].data, consult[0].nome_paciente, consult[0].area_medica, consult[0].nome_medico, preco)
-                        ret[data_retorno] = retorno
-                        print('Seu retorno foi marcado')
-                        break
-                    else:
-                        print('O prazo para marcar o retorno acabou!Será necessario marcar uma nova consulta')
-                        break
-                else:
-                    pass
-            break
-        except:
-            print('Erro na digitação do código da consulta!!')
 
             
 def mostrar_consultas(d):
@@ -222,6 +199,31 @@ def relatorioConsultas(d):
             print('_'*55)
     pass
 
+def agendar_retorno(ret,d):
+    while True:
+        try:
+            cod = int(input('Digite o código da consulta.\n'))
+            for codigo, consult in d.items():
+                if cod == codigo:
+                    data_retorno = escolher_data()
+                    data_con_passada = datetime.strptime(consult[0].data, '%d/%m/%Y').date()
+                    consult[0].data = data_retorno
+                    preco = 0
+                    if date.today() <= data_con_passada + timedelta(days=30):
+                        retorno = consulta(consult[0].data, consult[0].nome_paciente, consult[0].area_medica, consult[0].nome_medico, preco)
+                        ret[data_retorno] = retorno
+                        print('Seu retorno foi marcado')
+                        break
+                    else:
+                        print('O prazo para marcar o retorno acabou!Será necessario marcar uma nova consulta')
+                        break
+                else:
+                    pass
+            break
+        except:
+            print('Erro na digitação do código da consulta!!')
+
+            
 def main():
     dic_consultas = {}
     while True:
