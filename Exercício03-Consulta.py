@@ -47,11 +47,11 @@ def menu():
     while True:
         try:
             print('_' *55)
-            print('1 - Agendar consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês')
+            print('1 - Agendar consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês \n7 - Mostrar todas as consultas')
             print('_' *55)
             #Verifica se ação do usuário está nas opções citadas a cima.
             resp = int(input('>>> '))
-            if resp > 0 and resp < 7:
+            if resp > 0 and resp < 8:
                 break
         except:
             print('Ação não encontrada. Tente novamente.')
@@ -78,17 +78,16 @@ def areas_med(esc):
 
 #Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
 def escolher_data():
-        fds = [5, 6]
+    fds = [5, 6]
     while True:
         try:
             d = datetime.strptime(input("Data da consulta/Retorno:\n"),"%d/%m/%Y").date()
             if d <= date.today() or d.weekday() in fds:
-                raise ValueError("Data de consulta menor que data atual.")
+                raise ValueError("Data de consulta menor que data atual ou caiu em um final de semana.")
             else:
                 data = d.strftime("%d/%m/%Y")
         except:
             print('Digite a data desse modo dd/mm/aa!!')
-            break
             
     return data
 
@@ -173,6 +172,7 @@ def cancelar_consulta(d):
                         break
                     else:
                         print('Resposta inválida. Por favor, digite uma das opções oferecidas.', end=' ')
+                    
                 break
             else:
                 print('Código da consulta não encontrado. Tente novamente.', end=' ') 
@@ -202,7 +202,7 @@ def agendar_retorno(ret,d):
                     pass
             break
         except:
-            print('Erro na digitação do código da consulta!!')   
+            print('Erro na digitação do código da consulta!!') 
 
 #Escolhe um dos medicos e mostra as consultas realizadas por ele e quantas foram. / OBS: implementar prevenções de erro e aprimorar mais.
 def relatorioConsultas(d):
@@ -219,6 +219,18 @@ def relatorioConsultas(d):
             print('_'*55)
             cont += 1
     print(f'Número de consulas realizadas: {cont}') 
+
+def faturamentoClinica(d):
+    mes = int(input('O relatorio de qual mês você quer ver? '))
+    
+    for cod, cons in d.items():
+        data = cons[0].data
+        data_consulta = datetime.strptime(data, '%d/%m/%Y').date() 
+        if data_consulta.month == mes:
+            print('_'*55)
+            print(f'Consulta {cod}: \n{cons}\n')
+            print('_'*55)
+    pass
 
 def main():
     dic_consultas = {}
@@ -237,14 +249,18 @@ def main():
         #Agendar o retorno.        
         if r == 4:
             agendar_retorno(dic_consultas,dic_consultas)
-            pass
+            
         #Relatório de consultas realizadas no mes por médico
         if r == 5:
             relatorioConsultas(dic_consultas)
-            pass
+            
         if r == 6:
+            faturamentoClinica(dic_consultas)
+            pass      
+          
+        if r == 7:
             mostrar_consultas(dic_consultas)
-            pass            
+            pass          
                   
         
 if __name__ == '__main__':
