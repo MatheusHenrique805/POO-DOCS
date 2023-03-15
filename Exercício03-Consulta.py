@@ -3,9 +3,7 @@ from time import sleep
 #Criação da classe consulta.
 class consulta:
     cod_consultaAtual = 1#importante
-    estado = False#importante
-    quantidade_consultas = 0
-    faturamento = 0
+    estado = False#importante       
     #Define o construtor, fazendo com que os atributos sejam 'preco' e 'consulta' recebam valores na criação do objeto. 
     def __init__(self, data, nome_paciente,  area_medica, nome_medico,  preco):
         self.codigo = consulta.cod_consultaAtual
@@ -24,93 +22,95 @@ class consulta:
     
     #Metodos da classe.
     def pagar_consulta(self):
-        if not self.estado:
-            self.estado = True 
-            consulta.quantidade_consultas += 1
-            consulta.faturamento += 100.00
-            return True
-        else:
-            return False
-        
-def mostrar_consultas(d):
-    print('-'*20, 'CONSULTAS','-'*20)
-    for codigo, consulta in d.items():
-        print(consulta[0].nome_medico)
-        print('_'*55)
-        print(f'Consulta {codigo}: \n{consulta}\n')
-        print('_'*55)
-             
-#Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
-#Criar um arquivo .py para guardar o menu e as outras funções seria melhor, deixaria o principal mais limpo.
-#FEITO
-def menu():
-    while True:
-        try:
-            print('_' *55)
-            print('1 - Agendar consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês \n7 - Mostrar todas as consultas')
-            print('_' *55)
-            #Verifica se ação do usuário está nas opções citadas a cima.
-            resp = int(input('>>> '))
-            if resp > 0 and resp < 8:
-                break
-        except:
-            print('Ação não encontrada. Tente novamente.')
-    return resp 
+        self.estado = True 
 
-#Dicionario com as áreas disponivel para consulta e seus medicos.
-#FEITO
-def areas_med(esc):
-    dic_areamed = {}
-    dic_areamed['Pediatria'] = 'Arnaldo'
-    dic_areamed['Cardiologia'] = 'Laura'
-    dic_areamed['Dermatologia'] = 'Jonas'
-    dic_areamed['Urologia'] = 'Carlos'
-    cont = 1
-    for key in dic_areamed:
-            if esc == cont:
-                areamed = key
-                nomemedic = dic_areamed.get(key)
-                break
-            else:
-                cont += 1
-    
-    return nomemedic, areamed 
-
-#Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
-def escolher_data():
-    fds = [5, 6]
-    while True:
-        try:
-            d = datetime.strptime(input("Data da consulta/Retorno:\n"),"%d/%m/%Y").date()
-            if d <= date.today() or d.weekday() in fds:
-                raise ValueError("Data de consulta menor que data atual ou caiu em um final de semana.")
-            else:
-                data = d.strftime("%d/%m/%Y")
-        except:
-            print('Digite a data desse modo dd/mm/aa!!')
-            
-    return data
-
-#Cria o objeto nova_consulta, inseri ele dentro de uma lista que é implementada num dicionário.
-def criar_consulta(dc):
-    while True:
-        try:
-            #Preechimento dos dados da consulta.
-            data = escolher_data()
-            nome = input('Nome do paciente: ')
+def faturamentoClinica(d):
+    mes = int(input('O relatorio de qual mês você quer ver? '))
+    for cod, cons in d.items():
+        data = cons[0].data
+        data_consulta = datetime.strptime(data, '%d/%m/%Y').date() 
+        if data_consulta.month == mes:
             print('_'*55)
-            area = int(input('\nPara qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
-            nome_med, area_med = areas_med(area) 
-            preco = 300
-            #Criação do objeto consulta e implementação num dicionario.
-            nova_consulta = consulta(data, nome, area_med, nome_med, preco)
-            nova_consulta_lista = [nova_consulta]  
-            print(nova_consulta)
-            dc[nova_consulta.codigo] = nova_consulta_lista
+            print(f'Consulta {cod}: \n{cons}\n')
+            print('_'*55)
+        else:
+            pass
+
+
+def relatorioConsultas(d):
+    cont = 0
+    esc = int(input('Medico: \n1-Arnaldo \n2-Laura \n3-Jonas \n4-Carlos\n>>>'))
+    medico, area = areas_med(esc)
+    if cont == 0:
+        print('_'*55)
+        print(' '*19,f'{medico.upper()} ({area.upper()})')
+    for cod, cons in d.items():
+        if cons[0].nome_medico == medico:
+            print('_'*55)
+            print(f'Consulta {cod}: \n{cons}\n')
+            print('_'*55)
+            cont += 1
+        else:
+            pass
+    print(f'Número de consulas realizadas: {cont}') 
+
+
+def agendar_retorno(ret,d):
+    while True:
+        try:
+            cod = int(input('Digite o código da consulta.\n'))
+            for codigo, consult in d.items():
+                if cod == codigo:
+                    data_retorno = escolher_data()
+                    data_con_passada = datetime.strptime(consult[0].data, '%d/%m/%Y').date()
+                    consult[0].data = data_retorno
+                    preco = 0
+                    if date.today() <= data_con_passada + timedelta(days=30):
+                        retorno = consulta(consult[0].data, consult[0].nome_paciente, consult[0].area_medica, consult[0].nome_medico, preco)
+                        ret[data_retorno] = retorno
+                        print('Seu retorno foi marcado')
+                        break
+                    else:
+                        print('O prazo para marcar o retorno acabou!Será necessario marcar uma nova consulta')
+                        break
+                else:
+                    pass
             break
         except:
-            print('Houve um erro. Por favor, preencha os campos novamente.')
-
+            print('Erro na digitação do código da consulta!!')
+            
+    return ret
+                
+                
+def cancelar_consulta(d):
+    while True:
+        try:
+            cod = int(input('Digite o código da consulta deseja.\n'))
+            print('-'*20, 'CONSULTA','-'*20)
+            for codigo, consulta in d.items():
+                if cod == codigo:
+                    print(consulta[0].nome_medico)
+                    print('_'*55)
+                    print(f'Consulta {codigo}: \n{consulta}\n')
+                    print('_'*55)
+                    esc = input('Deseja cancelar essa consulta?(S-Sim/N-Não)\n').upper()[0]
+                    if esc == 'S':
+                        del d[codigo]
+                        print('Sua consulta foi cancelada')
+                        break
+                    elif esc == 'N':
+                        pass
+                        break
+                    else:
+                        raise ValueError('Opção não válida')
+                else:
+                    pass
+            break
+        except:
+            print( 'Só aceita números inteiros como respostas')
+            
+    return d
+             
 #Efetua o pagamento das consultas não pagas e verifica as que ja foram pagas.
 def pagamento(d):
     while True:
@@ -143,125 +143,98 @@ def pagamento(d):
             else:
                 raise ValueError('Código não encontrado', end=' ')
         except:
-            print('Verifique se eese é realmente o código correto.')   
-
-#Cancela a consulta / OBS: seria bom implenentar mais prevenções de erro.
-def cancelar_consulta(d):
+            print('Verifique se eese é realmente o código correto.')
+#Dicionario com as áreas disponivel para consulta e seus medicos.
+def areas_med(esc):
+    dic_areamed = {}
+    dic_areamed['Pediatria'] = 'Arnaldo'
+    dic_areamed['Cardiologia'] = 'Laura'
+    dic_areamed['Dermatologia'] = 'Jonas'
+    dic_areamed['Urologia'] = 'Carlos'
+    cont = 1
+    for key in dic_areamed:
+        if esc == cont:
+            areamed = key
+            nomemedic = dic_areamed.get(key)
+            break
+        else:
+            cont += 1
+    
+    return areamed, nomemedic
+            
+#Verfica se a data marcada pra consulta não está errada, como cair num dia que já passou ou em um fim de semana
+def escolher_data():
+    fds = [5, 6]
     while True:
         try:
-            codigo = int(input('Digite o Código da consulta que deseja cancelar: '))
-            if codigo in d.keys():
-                consulta = d[codigo]
-                print('-'*20, 'CONSULTA','-'*20)
-                print('_'*55)
-                print(f'Consulta {codigo}: \n{consulta}\n')
-                print('_'*55)
-                while True:
-                    r = input('Deseja cancelar essa consulta[S - Sim/N - Não]? ').upper()
-                    if r == 'S':
-                        r2 = input('A consulta será cancelada. Deseja continuar[S - Sim/N - Não]? ').upper()
-                        if r2 == 'S':
-                            del d[codigo]
-                            sleep(1)
-                            print('-'*20, 'CONSULTA CANCELADA','-'*20)
-                            print('Caso queira marcar uma nova consulta, vá na opção "Agendar consulta".')
-                            break
-                        elif r2 == 'N':
-                            break
-                    elif r ==  'N':
-                        break
-                    else:
-                        print('Resposta inválida. Por favor, digite uma das opções oferecidas.', end=' ')
-                    
-                break
+            d = datetime.strptime(input("Data da consulta/Retorno:\n"),"%d/%m/%Y").date()
+            if d <= date.today() or d.weekday() in fds:
+                raise ValueError("Data de consulta menor que data atual ou não é dia útil.")
             else:
-                print('Código da consulta não encontrado. Tente novamente.', end=' ') 
-        except ValueError:
-            print('Por favor, digite um valor númerico.', end=' ')
-
-#Agenda o retorno, limitando em até 30 dias após a última consulta.
-def agendar_retorno(ret,d):
+                data = d.strftime("%d/%m/%Y")
+                break
+        except:
+            print('Digite a data desse modo dd/mm/aa!!')
+                
+    return data
+                        
+#Cria o objeto nova_consulta, inseri ele dentro de uma lista que é implementada num dicionário.
+def criar_consulta(dc):
     while True:
         try:
-            cod = int(input('Digite o código da consulta.\n'))
-            for codigo, consult in d.items():
-                if cod == codigo:
-                    data_retorno = escolher_data()
-                    data_con_passada = datetime.strptime(consult[0].data, '%d/%m/%Y').date()
-                    consult[0].data = data_retorno
-                    preco = 0
-                    if date.today() <= data_con_passada + timedelta(days=30):
-                        retorno = consulta(consult[0].data, consult[0].nome_paciente, consult[0].area_medica, consult[0].nome_medico, preco)
-                        ret[data_retorno] = retorno
-                        print('Seu retorno foi marcado')
-                        break
-                    else:
-                        print('O prazo para marcar o retorno acabou!Será necessario marcar uma nova consulta')
-                        break
-                else:
-                    pass
+            #Preechimento dos dados da consulta.
+            data = escolher_data()
+            nome = input('Nome completo do paciente: ')
+            print('_'*55)
+            area = int(input('\nPara qual área é a consulta: \n1-Pediatria \n2-Cardiologia \n3-Dermatologia \n4-Urologia \n>>> '))
+            area_med, nome_med = areas_med(area) 
+            preco = 300
+            #Criação do objeto consulta e implementação num dicionario.
+            nova_consulta = consulta(data, nome, area_med, nome_med, preco)
+            nova_consulta_lista = [nova_consulta]  
+            print(nova_consulta)
+            dc[nova_consulta.codigo] = nova_consulta_lista
             break
         except:
-            print('Erro na digitação do código da consulta!!') 
+            print('Houve um erro. Por favor, preencha os campos novamente.')
+    return dc
 
-#Escolhe um dos medicos e mostra as consultas realizadas por ele e quantas foram. / OBS: implementar prevenções de erro e aprimorar mais.
-def relatorioConsultas(d):
-    cont = 0
-    esc = int(input('Medico: \n1-Arnaldo \n2-Laura \n3-Jonas \n4-Carlos\n>>>'))
-    medico, area = areas_med(esc)
-    if cont == 0:
-        print('_'*55)
-        print(' '*19,f'{medico.upper()} ({area.upper()})')
-    for cod, cons in d.items():
-        if cons[0].nome_medico == medico:
-            print('_'*55)
-            print(f'Consulta {cod}: \n{cons}\n')
-            print('_'*55)
-            cont += 1
-    print(f'Número de consulas realizadas: {cont}') 
+#Mostra ao cliente o menu do consultorio e recebe a ação que ele quer executar no sistema.
+def menu():
+    while True:
+        try:
+            print('_' *55)
+            print('1 - Nova consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês\n0 - Encerrar programa')
+            print('_' *55)
+            #Verifica se ação do usuário está nas opções citadas a cima.
+            resp = int(input('>>> '))
+            if resp > 0 and resp < 7:
+                break
+        except:
+            print('Açãoa não encontrada. Tente novamente.')
+    return resp 
 
-def faturamentoClinica(d):
-    mes = int(input('O relatorio de qual mês você quer ver? '))
-    
-    for cod, cons in d.items():
-        data = cons[0].data
-        data_consulta = datetime.strptime(data, '%d/%m/%Y').date() 
-        if data_consulta.month == mes:
-            print('_'*55)
-            print(f'Consulta {cod}: \n{cons}\n')
-            print('_'*55)
-    pass
-
+        
 def main():
+    retornos = {}
     dic_consultas = {}
-    dic_retorno = {}
     while True:
         r = menu()
-        #Criação da nova consulta(FEITO).
         if r == 1:
-            criar_consulta(dic_consultas)
-        #Efetua o pagamento da consulta e verifica se a consulta foi feita(FEITO).
-        if r == 2:
-            pagamento(dic_consultas)
-        #Cancela a consulta desejada, usando o codigo dela.
-        if r == 3:
-            cancelar_consulta(dic_consultas)
-        #Agendar o retorno.        
-        if r == 4:
-            agendar_retorno(dic_consultas,dic_consultas)
-            
-        #Relatório de consultas realizadas no mes por médico
-        if r == 5:
-            relatorioConsultas(dic_consultas)
-            
-        if r == 6:
+            consultas = criar_consulta(dic_consultas)
+        elif r == 2:
+            pagamento(consultas)
+        elif r == 3:
+            consultas = cancelar_consulta(consultas)
+        elif r == 4:
+            retornos = agendar_retorno(retornos,consultas)
+        elif r == 5:
+            relatorioConsultas(dic_consultas)  
+        elif r == 6:
             faturamentoClinica(dic_consultas)
-            pass      
-          
-        if r == 7:
-            mostrar_consultas(dic_consultas)
-            pass          
-                  
+        elif r == 0:
+            break
         
+                
 if __name__ == '__main__':
     main()
