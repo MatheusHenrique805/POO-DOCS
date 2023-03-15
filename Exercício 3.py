@@ -88,6 +88,7 @@ def escolher_data():
                 data = d.strftime("%d/%m/%Y")
         except:
             print('Digite a data desse modo dd/mm/aa!!')
+            break
             
     return data
 
