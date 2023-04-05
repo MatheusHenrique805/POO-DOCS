@@ -87,7 +87,7 @@ class pessoa:
                     self.estado_civil = 'Casado'
                     self.conjugue = conjuge
                     conjuge.estado_civil = 'Casado'
-                    conjuge.conjugue = self
+                    conjuge.conjuge = self
                  else:
                     print(f'Casamento não realizado. {self.nome} é casado')
             else:
