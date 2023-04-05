@@ -91,7 +91,7 @@ class pessoa:
                  else:
                     print(f'Casamento não realizado. {self.nome} é casado')
             else:
-                print(f'Casamento não realizado.{self.nome} é de menor'
+                print(f'Casamento não realizado.{self.nome} é de menor')
         else:
             if self.sexo == 'M':
                 print(f'Casamento não pode ser realizado.{self.nome} está morto.')
