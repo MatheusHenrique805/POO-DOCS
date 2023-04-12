@@ -1,5 +1,5 @@
 class pessoa:
-    def __init__(self, nome, peso, altura, sexo, estado='Vivo(a)', estado_civil='Solteiro(a)', conjugue=None):
+    def __init__(self, nome, idade, peso, altura, sexo, estado='Vivo(a)', estado_civil='Solteiro(a)', conjugue=None):
         self.nome = nome
         self.__idade = idade
         self.__peso = peso            
@@ -80,42 +80,55 @@ class pessoa:
             else:
                 print(f'Operação não realizada.{self.nome} está morta.')
 
-    def casar(self, conjuge)
-        if self.estado == 'Vivo':
-            if self.__idade >= 18:
-                if self.estado_civil != 'Casado':
+    def casar(self, conjuge):
+        if self.estado == 'Vivo' and conjugue.estado == 'Vivo':
+            if self.__idade >= 18 and conjugue.__idade >= 18:
+                if self.estado_civil != 'Casado' and conjugue.estado_civil != 'Casado':
                     self.estado_civil = 'Casado'
                     self.conjugue = conjuge
                     conjuge.estado_civil = 'Casado'
                     conjuge.conjuge = self
                  else:
-                    print(f'Casamento não realizado. {self.nome} é casado')
+                    print(f'Casamento não realizado. {self.nome} ou {conjugue.nome} é casado')
             else:
-                print(f'Casamento não realizado.{self.nome} é de menor')
+                print(f'Casamento não realizado.{self.nome} ou {conjugue.nome} é de menor')
         else:
             if self.sexo == 'M':
-                print(f'Casamento não pode ser realizado.{self.nome} está morto.')
+                print(f'Casamento não pode ser realizado.{self.nome} ou {conjugue.nome} está morto.')
             else:
-                print(f'Casamento não pode ser realizado.{self.nome} está morto')
+                print(f'Casamento não pode ser realizado.{self.nome} ou {self.nome} ou {conjugue.nome} está morto')
     
     def morrer(self, conjuge)
         if self.estado == 'Vivo':
             self.estado = 'Morto'
-            print('{self.nome} morreu')
+            if self.estado_civil == 'Casado':
+                conjuge.estado_civil = 'Viúvo'
+                conjuge.conjugue = None
+                print(f'{self.nome} morreu')
+           else:
+               print(f'{self.nome} morreu')
         else:
             if self.sexo == 'M':
                 print(f'Operação não realizada. {self.nome} já está morto.')
             else:
                 print(f'Operação não realizada. {self.nome} já está morta.')
-def menu():
-    print('1 - Listar pessoas')
-    print('2 - Incluir nova pessoa')
-    print('3 - Envelhecer')
-    print('4 - Engordar')
-    print('5 - Emagrecer')
-    print('6 - Crescer')
-    print('7 - Casar')
-    print('8 - Morrer')
-    print('9 - Alterar dados de uma pessoa')
-def main():
-    pessoas = [pessoa('Maria'), pessoa(),pessoa()]
+
+pessoas = [pessoa('Maria', 18, 63, 179,'F'), 
+           pessoa('Bruna', 23, 44, 165, 'F'), 
+           pessoa('Joâo', 18, 64, 178, 'M'),
+           pessoa('Lucas', 17, 54, 168, 'M'),
+           pessoa('Matheus', 22, 69, 171, 'M'),
+           pessoa('Lara', 21, 61, 178, 'F'),
+           pessoa('Andressa', 19, 52, 170, 'F'),
+           pessoa('Pedro', 21, 64, 178, 'M')]
+
+
+maria = pessoas[0]
+matheus = pessoas[4]
+joao = pessoas[2]
+bruna = pessoas[1]
+lucas = pessoas[3]
+lara = pessoas[5]
+andressa = pessoas[6]
+pedro = pessoas[7]
+
