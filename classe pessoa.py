@@ -1,5 +1,5 @@
 class pessoa:
-    def __init__(self, nome, idade, peso, altura, sexo, estado='Vivo(a)', estado_civil='Solteiro(a)', conjugue=None):
+    def __init__(self, nome, idade, peso, altura, sexo, estado='Vivo(a)', estado_civil='Solteiro(a)', conjuge=None):
         self.nome = nome
         self.__idade = idade
         self.__peso = peso            
@@ -81,31 +81,31 @@ class pessoa:
                 print(f'Operação não realizada.{self.nome} está morta.')
 
     def casar(self, conjuge):
-        if self.estado == 'Vivo' and conjugue.estado == 'Vivo':
-            if self.__idade >= 18 and conjugue.__idade >= 18:
-                if self.estado_civil != 'Casado' and conjugue.estado_civil != 'Casado':
+        if self.estado == 'Vivo' and conjuge.estado == 'Vivo':
+            if self.__idade >= 18 and conjuge.__idade >= 18:
+                if self.estado_civil != 'Casado' and conjuge.estado_civil != 'Casado':
                     self.estado_civil = 'Casado'
                     self.conjugue = conjuge
                     conjuge.estado_civil = 'Casado'
                     conjuge.conjuge = self
-                 else:
-                    print(f'Casamento não realizado. {self.nome} ou {conjugue.nome} é casado')
+                else:
+                    print(f'Casamento não realizado. {self.nome} ou {conjuge.nome} é casado')
             else:
-                print(f'Casamento não realizado.{self.nome} ou {conjugue.nome} é de menor')
+                print(f'Casamento não realizado.{self.nome} ou {conjuge.nome} é de menor')
         else:
             if self.sexo == 'M':
-                print(f'Casamento não pode ser realizado.{self.nome} ou {conjugue.nome} está morto.')
+                print(f'Casamento não pode ser realizado.{self.nome} ou {conjuge.nome} está morto.')
             else:
-                print(f'Casamento não pode ser realizado.{self.nome} ou {self.nome} ou {conjugue.nome} está morto')
+                print(f'Casamento não pode ser realizado.{self.nome} ou {self.nome} ou {conjuge.nome} está morto')
     
-    def morrer(self, conjuge)
+    def morrer(self, conjuge):
         if self.estado == 'Vivo':
             self.estado = 'Morto'
             if self.estado_civil == 'Casado':
                 conjuge.estado_civil = 'Viúvo'
                 conjuge.conjugue = None
                 print(f'{self.nome} morreu')
-           else:
+            else:
                print(f'{self.nome} morreu')
         else:
             if self.sexo == 'M':
@@ -131,4 +131,5 @@ lucas = pessoas[3]
 lara = pessoas[5]
 andressa = pessoas[6]
 pedro = pessoas[7]
+
 
