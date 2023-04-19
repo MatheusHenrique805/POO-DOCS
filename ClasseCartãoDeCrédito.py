@@ -15,7 +15,7 @@ class cartao:
         self.__titular = titular
         self.__validade = validade
         self.__cod_seguranca = cod_seguranca
-        self.limite_compra = limite_compra
+        self.__limite_compra = limite_compra
         self.__senha = senha
         self.__fatura_pagar = fatura_pagar
         self.__valor_min_pagar = valor_min_pagar
