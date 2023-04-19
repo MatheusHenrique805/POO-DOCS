@@ -60,7 +60,7 @@ class cartao:
     def valor_min_pagar(self):
         return self.__valor_min_pagar
 
-    @property
+    @property <=
     def status(self):
         return self.__status
 
@@ -68,16 +68,24 @@ class cartao:
         return f'nº cartão: {self.numero} \ntitular: {self.titular}\n valor mínimo da fatura: {self.valor_min_pagar}\nValor da fatura: {self.fatura_pagar}' 
 
     def desbloquear(self):
-        if self.__status == 'bloqueado':
-            self.__status = 'desbloqueado'
-            print('Cartão Desbloqueado.')
+        data_atual = (4, 2023)
+        if self.__status == 'bloqueado': 
+            if self.__validade[0] >= data_atual[0]:
+                self.__status = 'desbloqueado'
+                print('Cartão Desbloqueado.')
+            else:
+                print('Cartão fora da validade')
         else:
             print(f'Seu cartão ja está {self.__status}')
 
     def bloquear(self):
+        data_atual = (4, 2023)
         if self.__status != 'bloqueado':
-            self.__validade = 'desbloqueado'
-            print('Cartão Bloqueado.')
+            if self.__validade[0] < data_atual[0]:
+                self.__status = 'bloqueado'
+                print('Cartão Bloqueado.')
+            else:
+                print('Cartão fora da validade')
         else:
             print(f'Seu cartão ja está {self.__status}')
 
@@ -95,6 +103,12 @@ class cartao:
                     self.__fatura_pagar += valor
                     self.__valor_min_pagar = self._fatura_pagar * 0.3
                     print('Compra Realizada.')
+                else:
+                    print('Senha inválida')
+            else:
+                print('Valor da compra maior que o limite permitido')
+        else:
+            print('Compra negada!')
 
     def pagar_fatura(self, valor):
         if valor >= self.__valor_min_pagar and valor <= self.__fatura_pagar:
