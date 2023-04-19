@@ -62,3 +62,24 @@ class cartao:
         @property
         def status(self):
             return self.__status
+        
+        def __str__(self):
+            return f'nº cartão: {self.numero} \ntitular: {self.titular}\n valor mínimo da fatura: {self.valor_min_pagar}\nValor da fatura: {self.fatura_pagar}' 
+        def desbloquear(self):
+            if self.__status == 'bloqueado':
+                self.__status = 'desbloqueado'
+            else:
+                print(f'seu cartão ja está {self.__status}')
+
+        def mudar_senha(self, cod_seg, senha):
+            if cod_seg == self.__cod_seg:
+                self.__senha = senha
+            else:
+                print(f'codigo inválido')
+
+        def pagar_fatura(self, valor):
+            if valor >= self.__valor_min_pagar and valor <= self.__fatura_pagar:
+                self.__fatura_pagar -= valor
+                self.__lim_compras += valor
+            else:
+                print('Valor não aceitável')
