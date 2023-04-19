@@ -1,4 +1,3 @@
-#turma: 266
 #João Augusto da Silva de Morais
 #Matheus Henrique de Oliveira Rocha
 
@@ -60,17 +59,17 @@ class cartao:
     def valor_min_pagar(self):
         return self.__valor_min_pagar
 
-    @property <=
+    @property
     def status(self):
         return self.__status
 
     def __str__(self):
-        return f'nº cartão: {self.numero} \ntitular: {self.titular}\n valor mínimo da fatura: {self.valor_min_pagar}\nValor da fatura: {self.fatura_pagar}' 
+        return f'nº cartão: {self.numero} \ntitular: {self.titular}\nvalor mínimo da fatura: {self.valor_min_pagar}\nValor da fatura: {self.fatura_pagar}\n' 
 
     def desbloquear(self):
         data_atual = (4, 2023)
         if self.__status == 'bloqueado': 
-            if self.__validade[0] >= data_atual[0]:
+            if self.__validade[0] >= data_atual[0] and self.__validade[1] >= data_atual[1]:
                 self.__status = 'desbloqueado'
                 print('Cartão Desbloqueado.')
             else:
@@ -81,7 +80,7 @@ class cartao:
     def bloquear(self):
         data_atual = (4, 2023)
         if self.__status != 'bloqueado':
-            if self.__validade[0] < data_atual[0]:
+            if self.__validade[0] < data_atual[0] and self.__validade[1] >= data_atual[1]:
                 self.__status = 'bloqueado'
                 print('Cartão Bloqueado.')
             else:
@@ -90,39 +89,55 @@ class cartao:
             print(f'Seu cartão ja está {self.__status}')
 
     def mudar_senha(self, cod_seg, senha):
-        if cod_seg == self.__cod_seg:
-            self.__senha = senha
-        else:
-            print(f'codigo inválido')
+        if self.__status != 'bloqueado':
+            if cod_seg == self.__cod_seg:
+                self.__senha = senha
+            else:
+                print(f'codigo inválido')
 
     def comprar(self, valor, senha):
+        data_atual = (4, 2023)
         if self.__status != 'bloqueado':
-            if self.__limite_pagar > valor:
-                if senha == self.__senha:
-                    self.__limite_compra -= valor
-                    self.__fatura_pagar += valor
-                    self.__valor_min_pagar = self._fatura_pagar * 0.3
-                    print('Compra Realizada.')
+            if senha == self.__senha:
+                if self.__limite_compra > valor:
+                    if self.__validade[0] >= data_atual[0] and self.__validade[1] >= data_atual[1]:
+                        self.__limite_compra -= valor
+                        self.__fatura_pagar += valor
+                        vlr_min = self.__fatura_pagar * 3/100
+                        self.__valor_min_pagar = vlr_min
+                        print('Compra Realizada.')
+                    else:
+                        print('Cartão está fora da validade.')
                 else:
-                    print('Senha inválida')
+                    print('Valor da compra maior que o limite permitido.')
             else:
-                print('Valor da compra maior que o limite permitido')
+                print('Senha inválida.')
         else:
-            print('Compra negada!')
+            print('O cartão está bloqueado.')
 
     def pagar_fatura(self, valor):
-        if valor >= self.__valor_min_pagar and valor <= self.__fatura_pagar:
-            self.__fatura_pagar -= valor
-            self.__lim_compras += valor
-            print('Fatura paga.')
+        data_atual = (4, 2023)
+        if self.__validade[0] >= data_atual[0] and self.__validade[1] >= data_atual[1]:
+            if valor >= self.__valor_min_pagar and valor <= self.__fatura_pagar:
+                self.__fatura_pagar -= valor
+                self.__lim_compras += valor
+                print('Fatura paga.')
+                if self.__status == 'bloqueado':
+                    self.desbloquear()
+                else:
+                    pass
+            else:
+                print('Valor não aceitável')
         else:
-            print('Valor não aceitável')
-                
-ct= [cartao(1111, 'João Augusto', '05/2023', 567, 3000, 1234),
-    cartao(1112, 'Matheus Henrique', '06/2023', 550),
-    cartao(1113, 'Maria Eduarda', '04/2023', 500, 4500, 1234),
-    cartao(1114, 'Eizabeth Webber', '03/2023', 504),
-    cartao(1115, 'Elizandra Scott', '10/2023', 405)]
+            print('Cartão está fora da validade.')
+            
+#def __init__(self, numero, titular, validade, cod_seguranca,limite_compra=1000, senha=None, fatura_pagar=0, valor_min_pagar=0, status='bloqueado'):                
+ct= [cartao(1111, 'João Augusto', (7,2023), 567, 3000, 1234, status='desbloqueado'),
+    cartao(1112, 'Matheus Henrique', (2, 2023), 550),
+    cartao(1113, 'Maria Eduarda', (4,2023), 500, 4500, 1234),
+    cartao(1114, 'Eizabeth Webber', (10, 2023), 504),
+    cartao(1115, 'Elizandra Scott', (5, 2023), 405)]
 
-print(ct[0].status)
-ct[0].comprar(200, 1234)
+#O print do __str__
+for i in range(5):
+    print(ct[i])
