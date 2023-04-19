@@ -21,7 +21,7 @@ class cartao:
         self.__valor_min_pagar = valor_min_pagar
         self.__status = status
 
-        @property
+         @property
         def numero(self):
             return self.__numero
 
@@ -65,21 +65,40 @@ class cartao:
         
         def __str__(self):
             return f'nº cartão: {self.numero} \ntitular: {self.titular}\n valor mínimo da fatura: {self.valor_min_pagar}\nValor da fatura: {self.fatura_pagar}' 
+        
         def desbloquear(self):
             if self.__status == 'bloqueado':
                 self.__status = 'desbloqueado'
+                print('Cartão Desbloqueado.')
             else:
-                print(f'seu cartão ja está {self.__status}')
+                print(f'Seu cartão ja está {self.__status}')
+                
+        def bloquear(self):
+            if self.__status != 'bloqueado':
+                self.__validade = 'desbloqueado'
+                print('Cartão Bloqueado.')
+            else:
+                print(f'Seu cartão ja está {self.__status}')
 
         def mudar_senha(self, cod_seg, senha):
             if cod_seg == self.__cod_seg:
                 self.__senha = senha
             else:
                 print(f'codigo inválido')
-
+                
+        def comprar(self, valor, senha):
+            if self.__status != 'bloqueado':
+                if self.__limite_pagar > valor:
+                    if senha == self.__senha:
+                        self.__limite_compra -= valor
+                        self.__fatura_pagar += valor
+                        self.__valor_min_pagar = self._fatura_pagar * 0.3
+                        print('Compra Realizada.')
+                        
         def pagar_fatura(self, valor):
             if valor >= self.__valor_min_pagar and valor <= self.__fatura_pagar:
                 self.__fatura_pagar -= valor
                 self.__lim_compras += valor
+                print('Fatura paga.')
             else:
                 print('Valor não aceitável')
