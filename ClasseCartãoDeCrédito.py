@@ -1,5 +1,14 @@
 #João Augusto da Silva de Morais
 #Matheus Henrique de Oliveira Rocha
+
+
+#data_atual = date.today()
+#print(data_atual)       
+#data_em_texto = '{}/{}'.format(data_atual.month,data_atual.year)
+#print(data_em_texto)
+#data_em_texto = data_atual.strftime('%m/%Y')
+#print(data_em_texto)
+
 class cartao:
     def __init__(self, numero, titular, validade, cod_seguranca,limite_compra=1000, senha=None, fatura_pagar=0, valor_min_pagar=0, status='bloqueado'):
         self.__numero = numero
