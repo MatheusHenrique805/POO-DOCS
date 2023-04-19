@@ -102,3 +102,12 @@ class cartao:
                 print('Fatura paga.')
             else:
                 print('Valor não aceitável')
+                
+ct= [cartao(1111, 'João Augusto', '05/2023', 567, 3000, 1234),
+    cartao(1112, 'Matheus Henrique', '06/2023', 550),
+    cartao(1113, 'Maria Eduarda', '04/2023', 500, 4500, 1234),
+    cartao(1114, 'Eizabeth Webber', '03/2023', 504),
+    cartao(1115, 'Elizandra Scott', '10/2023', 405)]
+
+print(ct[0].status)
+ct[0].comprar(200, 1234)
