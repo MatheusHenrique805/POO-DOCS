@@ -226,7 +226,14 @@ def menu():
     while True:
         try:
             print('_' *55)
-            print('1 - Nova consulta \n2 - Pagar consulta \n3 - Cancelar consulta \n4 - Agendar retorno \n5 - Relatório de consultas realizadas no mês por médico \n6 - Relatório de faturamento da Clinica por mês\n0 - Encerrar programa')
+            print('''1 - Cadastrar paciente
+            2 - Cadatrar Médico
+            3 - Marca consulta
+            4 - Pagar consulta
+            5 - Cancelar consulta
+            6 - Marcar retorno
+            0 - Encerrar programa
+            ''')
             print('_' *55)
             #Verifica se ação do usuário está nas opções citadas a cima.
             resp = int(input('>>> '))
