@@ -1,6 +1,6 @@
 from datetime import *
 class Consultamedica:
-    def __init__(self, id_consulta, medico, paciente, data, data_retorno=None , pago=False):
+    def __init__(self, id_consulta, medico, paciente, data, data_retorno=None , pagamento=False):
         self.__id_consulta = id_consulta
         if type(medico) == Medico:
             self.__medico = medico
@@ -12,7 +12,7 @@ class Consultamedica:
             raise 'Error!'
         self.__data = data
         self.__data_retorno = data_retorno
-        self.__pago = pago
+        self.__pagamento = pago
     
     def __str__(self):
         return f'Data da consulta:{self.__data}\nPaciente:{self.__paciente.nome}\nMédico:{self.__medico.nome}'
@@ -56,11 +56,15 @@ def escolher_data():
 
 
 def cadastrar_medico():
-    pass
-
+    cpf = int(input('Informe seu CPF(SEM PONTUAÇÃO GRÁFICA!!!).\n'))
+    nome = input('Informe seu nome.\n')
+    crm = input('Informe seu crm(SEM PONTUAÇÃO GRÁFICA!!!).\n')
+    espec_medica = input('Informe a sua especialidade médica.\n)
+    
+    return Medico(cpf, crm, nome, espec_medica)
 
 def cadastrar_paciente():
-    cpf = int(input('Informe o cpf.\n'))
+    cpf = int(input('Informe o CPF(SEM PONTUAÇÃO GRÁFICA!!!).\n'))
     nome = input('Agora seu nome.\n')
     data_nascimento = datetime.strptime(input("Informe a data de nascimento:"),"%d/%m/%Y").date()
     contato = int(input('Telefone para contato.\n'))
