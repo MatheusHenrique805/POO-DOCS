@@ -12,7 +12,23 @@ class Consultamedica:
             raise 'Error!'
         self.__data = data
         self.__data_retorno = data_retorno
-        self.__pagamento = pago
+        self.__pagamento = pagamento
+        
+    @property
+    def id_consulta(self):
+        return self.__id_consulta
+    @property
+    def medico(self):
+        return self.__medico
+    @property
+    def paciente(self):
+        return self.__paciente
+    @property
+    def pago(self):
+        return self.__pago
+    @property
+    def data_retorno(self):
+        return self.__data_retorno
     
     def __str__(self):
         return f'Data da consulta:{self.__data}\nPaciente:{self.__paciente.nome}\nMédico:{self.__medico.nome}'
@@ -22,7 +38,16 @@ class Paciente:
         self.__nome = nome
         self.__data_nasc = data_nasc
         self.__contato = contato
-    
+        
+    @property
+    def id_paciente(self):
+        return self.__id_paciente
+    @property
+    def data_nasc(self):
+        return self.__dt_nasc
+    @property
+    def contato(self):
+        return self.__contato
     
     def __str__(self):
         return f'ID:{self.__id_paciente}\nNome:{self.__nome}\nData de nascimento:{self.__data_nasc}\nTelefone:{self.__contato}'
@@ -35,17 +60,21 @@ class Medico:
     def __str__(self):
         return f'ID:{self.__id_medico}\nCRM:{self.__crm}\nNome:{self.nome}\nEspecialidade:{self.especialidade}'
 
-
-
+    @property
+    def id_medico(self):
+        return self.__id_medico
+    @property
+    def crm(self):
+        return self.__crm
 
 
 def escolher_data():
     fds = [5, 6]
     while True:
         try:
-            d = datetime.strptime(input("Data da consulta/Retorno:\n"),"%d/%m/%Y").date()
+            d = datetime.strptime(input("Informe a data da consulta(dd/mm/aaaa).\n"),"%d/%m/%Y").date()
             if d <= date.today() or d.weekday() in fds:
-                print("Data inserida menor que data atual ou corresponde a um dia de sábado ou domingo.")
+                print("Data inserida não corresponde a um útil.")
             else:
                 data = d.strftime("%d/%m/%Y")
                 break
@@ -55,18 +84,30 @@ def escolher_data():
     return data
 
 
+def confirmar_objetos(nome, lista):
+    for i in lista:
+        if nome == i.nome:
+            return i.nome
+        else:
+            continue
+    
+    return None
+
+
 def cadastrar_medico():
+   
     cpf = int(input('Informe seu CPF(SEM PONTUAÇÃO GRÁFICA!!!).\n'))
     nome = input('Informe seu nome.\n')
-    crm = input('Informe seu crm(SEM PONTUAÇÃO GRÁFICA!!!).\n')
-    espec_medica = input('Informe a sua especialidade médica.\n)
+    crm = int(input('Informe seu crm(SEM PONTUAÇÃO GRÁFICA!!!).\n'))
+    espec_medica = input('Informe a sua especialidade médica.\n')
     
     return Medico(cpf, crm, nome, espec_medica)
+            
 
 def cadastrar_paciente():
     cpf = int(input('Informe o CPF(SEM PONTUAÇÃO GRÁFICA!!!).\n'))
     nome = input('Agora seu nome.\n')
-    data_nascimento = datetime.strptime(input("Informe a data de nascimento:"),"%d/%m/%Y").date()
+    data_nascimento = datetime.strptime(input("Informe a data de nascimento(dd/mm/aaaa):"),"%d/%m/%Y").date()
     contato = int(input('Telefone para contato.\n'))
 
     return Paciente(cpf, nome, data_nascimento, contato)
@@ -104,13 +145,12 @@ def main():
             m1 = cadastrar_medico()
             medicos.append(m1)
         elif opc == 3:
-            # dar os inputs para os atributos
-            # pegar o nome do paciente
-            # buscar na lista de pacientes o objeto correspondente
-            # pegar o nome do medico
-            #buscar na lista de médicos o objeto correspondente
-            #criar o objeto ConsultaMedica
-            # inserir na lista de consultas médicas
+            nome_paciente = input('Informe o nome do paciente.\n')
+            pac = confirmar_objetos(nome_paciente, pacientes)
+            cod_consulta = pacientes.index(pac)
+            nome_medico = input('Informe nome do médico.\n')
+            medi = confirmar_objetos(nome_medico, medicos)
+            data_consulta = escolher_data()
+            consultas.append(Consultamedica(cod_consulta, medi, pac, data_consulta))
         elif opc == 4:
-            # pegar na lista de consultas (por data, por nome do paciente ou por nome do médico)
-            # retornar o objeto correspondente ao critério da pesquisa
+            pass
