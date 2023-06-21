@@ -33,14 +33,14 @@ class Aluno:
     def solicitar_entrada(self,curso,universidade):
         if universidade.tipo == 'publica' and self.matricula_uni_publica != None:
             if self.pont_enem > curso.nota_corte:
-                self.__matricula_uni_publica = universidade
+                self.__matricula_uni_publica = True
                 print(f'Solicitação Aceita!')
                 return True
             else:
                 print('Solicitação negada. Sua nota não é o suficiente para entrar no curso.')
         elif universidade.tipo == 'privada' and self.matricula_uni_priv != None:
             if self.pont_enem > curso.nota_corte:
-                self.__matricula_uni_priv = universidade
+                self.__matricula_uni_priv = True
                 print(f'Solicitação Aceita!')
                 return True
             else:
@@ -58,8 +58,24 @@ class Aluno:
                 print(f'O curso escolhido não possui mais vagas.')        
         
     def solicitar_transferencia(self,univ_ori,curso_ori,univ_dest):
-        if univ_ori == self.matricula_uni_priv or univ_ori == self.matricula_uni_publica:
+        # Verifica se o aluno está realmente no curso e se esse curso existe na universidade de origem
+        if self in curso_ori.alunos and curso_ori in univ_ori.cursos:
+            # 
+            if curso_ori in univ_dest.cursos:
+                indice = univ_dest.cursos.index(curso_ori)
+                curso = univ_dest.cursos[indice]
+                if curso.vagas > 0:
+                    curso_ori.alunos.remove(self)
+                    # Adicionar aluno no curso da nova universidade.
+                else:
+                    print(f'O curso não possui mais vagas disponíveis.')
+                pass
+            else:
+                print('Curso não encontrado.')
             pass
+        else:
+            print('Informações inválidas. Por favor, verifique se as informações que você inseriu estão corretas.')
+
     def __str__(self):
         pass
     
