@@ -63,10 +63,11 @@ class Aluno:
     def solicitar_transferencia(self,univ_ori,curso_ori,univ_dest):
         # Verifica se o aluno está realmente no curso e se esse curso existe na universidade de origem
         if self in curso_ori.alunos and curso_ori in univ_ori.cursos:
-            # 
+            # Verifica se o curso desejado existe na universidade
             if curso_ori in univ_dest.cursos:
                 indice = univ_dest.cursos.index(curso_ori)
                 curso = univ_dest.cursos[indice]
+                # Verifica se existe vaga no curso
                 if curso.vagas > 0:
                     curso_ori.alunos.remove(self)
                     # Adicionar aluno no curso da nova universidade.
@@ -170,4 +171,3 @@ class Sisu:
             if i.nome == nome:
                 return i
         return None
-     
