@@ -1,5 +1,5 @@
 class Aluno:
-    def __init__(self, cpf, nome, dt_nasc, matricula_uni_publica, matricula_uni_priv, pont_enem):
+    def __init__(self, cpf, nome, dt_nasc, pont_enem, matricula_uni_publica=None, matricula_uni_priv=None):
         self.__cpf = cpf
         self.__nome = nome
         self.__dt_nasc = dt_nasc
@@ -31,16 +31,18 @@ class Aluno:
         return self.__pont_enem
 
     def solicitar_entrada(self,curso,universidade):
-        if universidade.tipo == 'publica' and self.matricula_uni_publica == False:
+        if universidade.tipo == 'publica' and self.matricula_uni_publica != None:
             if self.pont_enem > curso.nota_corte:
-                self.__matricula_uni_publica = True
+                self.__matricula_uni_publica = universidade
                 print(f'Solicitação Aceita!')
+                return True
             else:
                 print('Solicitação negada. Sua nota não é o suficiente para entrar no curso.')
-        elif universidade.tipo == 'privada' and self.matricula_uni_priv == False:
+        elif universidade.tipo == 'privada' and self.matricula_uni_priv != None:
             if self.pont_enem > curso.nota_corte:
-                self.__matricula_uni_priv = True
+                self.__matricula_uni_priv = universidade
                 print(f'Solicitação Aceita!')
+                return True
             else:
                 print('Solicitação negada. Sua nota não é o suficiente para entrar no curso.')
         else:
@@ -48,14 +50,16 @@ class Aluno:
 
     def efetivar_matricula(self,curso,universidade):
         if self.solicitar_entrada(curso,universidade):
+            curso.cadastrar_aluno(self)
             if curso.vagas > 0:
                 curso.vagas -= 1
                 print(f'Matricula efetivada!')
             else:
                 print(f'O curso escolhido não possui mais vagas.')        
         
-    def solita_transferencia(self,univ_ori,curso_ori,univ_dest):
-        pass
+    def solicitar_transferencia(self,univ_ori,curso_ori,univ_dest):
+        if univ_ori == self.matricula_uni_priv or univ_ori == self.matricula_uni_publica:
+            pass
     def __str__(self):
         pass
     
@@ -88,7 +92,7 @@ class Curso:
     def aluno(self):
         return self.__alunos
 
-    def inclui_alunos(self,aluno):
+    def cadastrar_alunos(self,aluno):
         if aluno.matricula_uni_publica == True and aluno.matricula_uni_priv == False:
             self.alunos.append(aluno)
         elif aluno.matricula_uni_publica == False and aluno.matricula_uni_priv == True:
@@ -101,7 +105,7 @@ class Curso:
     def __str__(self):
         cab = f'curso:{self.__nome} - Relação de alunos'
         for i in self.__alunos:
-            pass    
+            pass 
         
 class Universidade:
     def __init__(self, sigla, nome, tipo):
