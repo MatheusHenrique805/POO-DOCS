@@ -89,8 +89,12 @@ class Curso:
         return self.__alunos
 
     def inclui_alunos(self,aluno):
-        pass
-
+        if aluno.matricula_uni_publica == True and aluno.matricula_uni_priv == False:
+            self.alunos.append(aluno)
+        elif aluno.matricula_uni_publica == False and aluno.matricula_uni_priv == True:
+            self.alunos.append(aluno)
+        else:
+            print('cadastro não realizado por requisitos não atendidos!!') 
     def busca_aluno(self,aluno):
         pass
 
