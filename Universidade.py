@@ -1,3 +1,6 @@
+# João Augusto da Silva de Morais
+# Matheus Henrique de Oliveira Rocha
+
 class Aluno:
     def __init__(self, cpf, nome, dt_nasc, pont_enem, matricula_uni_publica=None, matricula_uni_priv=None):
         self.__cpf = cpf
