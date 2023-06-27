@@ -79,9 +79,10 @@ class SeguroAutomovel(Seguro):
         return valor
     def calcularPremio(self):
         premio = self._valor_auto * 0.8
-        return self._valor_auto * 0.8
+        return premio
     def calcularFranquia(self):
-        return self.calcularValor() * 0.4
+        franquia = (self._valor_auto * 0.03) * 0.4 
+        return franquia
         
     def __str__(self):
         return super().__str__
