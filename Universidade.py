@@ -67,27 +67,33 @@ class Aluno:
     pontuação do enem'''
     
     def solicitar_transferencia(self,univ_ori,curso_ori,univ_dest):
-        # Verifica se o aluno está realmente no curso e se esse curso existe na universidade de origem
-        if self in curso_ori.alunos and curso_ori in univ_ori.cursos:
-            # Verifica se o curso desejado existe na universidade
-            if curso_ori in univ_dest.cursos:
-                indice = univ_dest.cursos.index(curso_ori)
-                curso = univ_dest.cursos[indice]
-                # Verifica se existe vaga no curso
-                if curso.vagas > 0:
-                    curso_ori.alunos.remove(self)
-                    curso.cadastrar_aluno(self)
-                    print(f'Transferência realizada com sucesso!')
-                    # Adicionar aluno no curso da nova universidade.
+        for i in univ_dest.cursos:
+            if  curso_ori.nome == i.nome:
+                curso_dest = i
+                # Verifica se o aluno está realmente no curso e se esse curso existe na universidade de origem
+                if self in curso_ori.alunos and curso_ori in univ_ori.cursos:
+                    # Verifica se o curso desejado existe na universidade
+                    if curso_dest  in univ_dest.cursos:
+                        indice = univ_dest.cursos.index(curso_ori)
+                        curso = univ_dest.cursos[indice]
+                        # Verifica se existe vaga no curso
+                        if curso.vagas > 0:
+                            curso_ori.alunos.remove(self)
+                            curso.cadastrar_aluno(self)
+                            print(f'Transferência realizada com sucesso!')
+                            break
+                            # Adicionar aluno no curso da nova universidade.
+                        else:
+                            print(f'O curso não possui mais vagas disponíveis.')
+                        pass
+                    else:
+                        print('Curso não encontrado.')
+                    pass
                 else:
-                    print(f'O curso não possui mais vagas disponíveis.')
-                pass
+                    print('Informações inválidas. Por favor, verifique se as informações que você inseriu estão corretas.')
             else:
-                print('Curso não encontrado.')
-            pass
-        else:
-            print('Informações inválidas. Por favor, verifique se as informações que você inseriu estão corretas.')
-
+                pass
+            
     def __str__(self):
         return f'\nNome do Aluno: {self.nome} \nData de Nascimento: {self.dt_nasc} \nPontuação do Enem: {self.pont_enem}\n'
     
@@ -119,7 +125,7 @@ class Curso:
     @property
     def aluno(self):
         return self.__alunos
-
+    # Esse metódo é chamado na classe Aluno nos metódos efetivar_matricula e solicitar_transferencia. 
     def cadastrar_alunos(self,aluno):
         if aluno.matricula_uni_publica == True and aluno.matricula_uni_priv == False:
             self.alunos.append(aluno)
