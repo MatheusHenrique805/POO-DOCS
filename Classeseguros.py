@@ -14,17 +14,11 @@ class Cliente:
     def idade(self):
         return self.__idade
 
-    def aumentar_idade(self):
-        pass
-
-    def nome_cliente(self):
-        pass
-
 
 class Seguro:
     def __init__(self, num_apolice, proprietario):
         self._num_apolice = num_apolice
-        self._proprietario = Cliente
+        self._proprietario = proprietario
         
     def calcularValor(self):
         pass
@@ -45,7 +39,7 @@ class SeguroVida(Seguro):
         benefic = self._proprietario        
         if benefic.idade >= 1 and benecif.idade <= 30:
             valor = 800
-        elif benefic.idade >=31 and benefic.idade <= 50:
+        elif benefic.idade >= 31 and benefic.idade <= 50:
             valor = 1.300
         elif benefic.idade < 50:
             valor = 1.600
@@ -56,12 +50,13 @@ class SeguroVida(Seguro):
         benefic = self._proprietario
         if  benefic.idade >= 1 and benefic.idade <= 30:
             premio = 50.000
-        elif benefic.idade >=31 and benefic.idade <= 50:
+        elif benefic.idade >= 31 and benefic.idade <= 50:
             premio = 30.000
         elif benefic.idade < 50:
             premio = 20.000
 
         return premio
+
     def __str__(self):
         return super().__str__
 
@@ -77,9 +72,11 @@ class SeguroAutomovel(Seguro):
     def calcularValor(self):
         valor = self._valor_auto * 0.03
         return valor
+        
     def calcularPremio(self):
         premio = self._valor_auto * 0.8
         return premio
+        
     def calcularFranquia(self):
         franquia = (self._valor_auto * 0.03) * 0.4 
         return franquia
@@ -87,3 +84,11 @@ class SeguroAutomovel(Seguro):
     def __str__(self):
         return super().__str__
 
+class ControleDeSeguro:
+    seguros = []
+    
+    def cadastrarseguro(self):
+        pass
+        
+    def __str__(self):
+        pass
