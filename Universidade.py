@@ -32,7 +32,7 @@ class Aluno:
     @property
     def pont_enem(self):
         return self.__pont_enem
-
+    # È chamado atráves do metódo efetivar_matricula
     def solicitar_entrada(self,curso,universidade):
         if universidade.tipo == 'publica' and self.matricula_uni_publica != True:
             if self.pont_enem > curso.nota_corte:
@@ -53,8 +53,8 @@ class Aluno:
 
     def efetivar_matricula(self,curso,universidade):
         if self.solicitar_entrada(curso,universidade):
-            curso.cadastrar_aluno(self)
             if curso.vagas > 0:
+                curso.cadastrar_aluno(self)
                 curso.vagas -= 1
                 print(f'Matricula efetivada!')
             else:
@@ -108,7 +108,7 @@ class Curso:
         return self.__nome
     @property
     def duracao(self):
-        return self.__duracao
+        return f'{self.__duracao} anos'
     @property
     def vagas(self):
         return self.__vagas
@@ -164,7 +164,7 @@ class Universidade:
 
             
     def buscar_curso(self,curso):
-        for i in self.__alunos:
+        for i in self.__curso:
             if i.curso == curso:
                 return i
         return None
@@ -200,8 +200,21 @@ unesa = Universidade('UNESA', 'Estácio', 'Privada')
 print(uespi, ufpi, unesa)
 ######################################################################
 # Criando os objetos da classe Curso
-matematica = Curso(1, 'Matemática', 300, 40, 500)
-portugues = Curso(2, 'Português', 350, 30, 600)
+# -- UESPI --
+medicina1 = Curso(5, 'Medicina', 8, 35, 850)
+matematica1 = Curso(1, 'Matemática', 4, 40, 500)
+portugues1 = Curso(2, 'Português', 4, 30, 620)
+quimica = Curso(3, ' Química', 400, 40, 700 )
+# --UFPI--
+matematica2 = Curso(1, 'Matemática', 5, 30, 560)
+portugues2 = Curso(2, 'Português', 4, 30, 650)
+administracao1 = Curso(6, 'Administração', 550, 35, 700)
+medicina2 = Curso(5, 'Medicina', 10, 25, 880)
+# --UNESA--
+matematica2 = Curso(1, 'Matemática', 5, 40, 560)
+medicina2 = Curso(5, 'Medicina', 10, 40, 880)
+ads = Curso(4, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
+
 quimica = Curso(3, ' Química', 400, 40, 700 )
 ads = Curso(4, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
 medicina = Curso(5, 'Medicina', 600, 40, 850)
