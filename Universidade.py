@@ -89,10 +89,10 @@ class Aluno:
             print('Informações inválidas. Por favor, verifique se as informações que você inseriu estão corretas.')
 
     def __str__(self):
-        return f'Nome do Aluno: {self.nome} \nData de Nascimento: {self.dt_nasc} \nPontuação do Enem: {self.pont_enem}'
+        return f'\nNome do Aluno: {self.nome} \nData de Nascimento: {self.dt_nasc} \nPontuação do Enem: {self.pont_enem}\n'
     
 class Curso:
-    def __init__(self, id_curso, nome, duracao, vagas, nota_corte, alunos):
+    def __init__(self, id_curso, nome, duracao, vagas, nota_corte):
         self.__id_curso = id_curso
         self.__nome = nome
         self.__duracao = duracao
@@ -131,9 +131,10 @@ class Curso:
         pass
 
     def __str__(self):
-        cab = f'curso:{self.__nome} - Relação de alunos'
-        for i in self.__alunos:
-            pass 
+        cab =f'\ncurso:{self.__nome} - Relação de alunos:\n'
+        for i in self.alunos:
+            cab += f'\n{i}\n'
+        return cab.strip('\n')
         
 class Universidade:
     def __init__(self, sigla, nome, tipo):
@@ -160,11 +161,15 @@ class Universidade:
             print(f'Curso cadastrado com sucesso!')
         else:
             print('Erro!')
+
+            
     def buscar_curso(self,curso):
         for i in self.__alunos:
             if i.curso == curso:
                 return i
         return None
+    def __str__(self):
+        return f'\nSigla: {self.sigla}\nNome: {self.nome}\nTipo: {self.tipo}\n'
 
 class Sisu:
     __universidade = []
@@ -179,3 +184,35 @@ class Sisu:
             if i.nome == nome:
                 return i
         return None
+
+
+
+joao = Aluno(20222110344, 'João Augusto', '10/11/2004', 589)
+flavio = Aluno(20222110760,'Flávio Leão','28/10/2001',625)
+matheus = Aluno(20222110484, 'Matheus Henrique', '28/12/2000', 650)
+print(joao, flavio, matheus)
+uespi = Universidade('UESPI', 'Universidade Estadual do Piauí', 'Pública')
+ufpi = Universidade('UFPI', 'Universidade Federal do Piauí', 'Pública')
+unesa = Universidade('UNESA', 'Estácio', 'Privada')
+print(uespi, ufpi, unesa)
+
+matematica = Curso(1, 'Matemática', 300, 40, 500)
+portugues = Curso(2, 'Português', 350, 30, 600)
+quimica = Curso(3, ' Química', 400, 40, 700 )
+ads = Curso(4, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
+medicina = Curso(5, 'Medicina', 600, 40, 850)
+administracao = Curso(6, 'Administração', 550, 35, 700)
+fisica = Curso(7, 'Física', 350, 30, 600)
+print(matematica, portugues, quimica, ads, medicina, administracao)
+
+uespi.cadastrar_curso(matematica)
+uespi.cadastrar_curso(quimica)
+uespi.cadastrar_curso(medicina)
+
+ufpi.cadastrar_curso(matematica)
+ufpi.cadastrar_curso(administracao)
+ufpi.cadastrar_curso(portugues)
+
+unesa.cadastrar_curso(matematica)
+unesa.cadastrar_curso(ads)
+unesa.cadastrar_curso(medicina)
