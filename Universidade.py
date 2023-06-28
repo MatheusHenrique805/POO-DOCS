@@ -186,16 +186,20 @@ class Sisu:
         return None
 
 
-
+#########################################################################
+# Criando os objetos da classe Aluno
 joao = Aluno(20222110344, 'João Augusto', '10/11/2004', 589)
 flavio = Aluno(20222110760,'Flávio Leão','28/10/2001',625)
 matheus = Aluno(20222110484, 'Matheus Henrique', '28/12/2000', 650)
 print(joao, flavio, matheus)
+########################################################################
+# Criando os objetos da classe Universidade
 uespi = Universidade('UESPI', 'Universidade Estadual do Piauí', 'Pública')
 ufpi = Universidade('UFPI', 'Universidade Federal do Piauí', 'Pública')
 unesa = Universidade('UNESA', 'Estácio', 'Privada')
 print(uespi, ufpi, unesa)
-
+######################################################################
+# Criando os objetos da classe Curso
 matematica = Curso(1, 'Matemática', 300, 40, 500)
 portugues = Curso(2, 'Português', 350, 30, 600)
 quimica = Curso(3, ' Química', 400, 40, 700 )
@@ -204,7 +208,8 @@ medicina = Curso(5, 'Medicina', 600, 40, 850)
 administracao = Curso(6, 'Administração', 550, 35, 700)
 fisica = Curso(7, 'Física', 350, 30, 600)
 print(matematica, portugues, quimica, ads, medicina, administracao)
-
+######################################################################
+#Cadastrando os cursos
 uespi.cadastrar_curso(matematica)
 uespi.cadastrar_curso(quimica)
 uespi.cadastrar_curso(medicina)
@@ -216,3 +221,5 @@ ufpi.cadastrar_curso(portugues)
 unesa.cadastrar_curso(matematica)
 unesa.cadastrar_curso(ads)
 unesa.cadastrar_curso(medicina)
+#############################################
+#
