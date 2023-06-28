@@ -207,25 +207,24 @@ print(uespi, ufpi, unesa)
 ######################################################################
 # Criando os objetos da classe Curso
 # -- UESPI --
-medicina1 = Curso(5, 'Medicina', 8, 35, 850)
-matematica1 = Curso(1, 'Matemática', 4, 40, 500)
-portugues1 = Curso(2, 'Português', 4, 30, 620)
-quimica = Curso(3, ' Química', 400, 40, 700 )
+medicina_uespi = Curso(5, 'Medicina', 8, 35, 850)
+matematica_uespi = Curso(1, 'Matemática', 4, 40, 500)
+administracao_uespi = Curso(6, 'Administração', 550, 35, 700)
+portugues_uespi = Curso(2, 'Português', 4, 30, 620)
+quimica_uespi = Curso(3, ' Química', 400, 40, 700 )
 # --UFPI--
-matematica2 = Curso(1, 'Matemática', 5, 30, 560)
-portugues2 = Curso(2, 'Português', 4, 30, 650)
-administracao1 = Curso(6, 'Administração', 550, 35, 700)
-medicina2 = Curso(5, 'Medicina', 10, 25, 880)
+matematica_ufpi = Curso(1, 'Matemática', 5, 30, 560)
+portugues_ufpi = Curso(2, 'Português', 4, 30, 650)
+administracao_ufpi = Curso(3, 'Administração', 550, 35, 700)
+medicina_ufpi = Curso(4, 'Medicina', 10, 25, 880)
+quimica_ufpi = Curso(5, ' Química', 400, 40, 700 )
+fisica_ufpi = Curso(6, 'Física', 350, 30, 650)
 # --UNESA--
-matematica2 = Curso(1, 'Matemática', 5, 40, 560)
-medicina2 = Curso(5, 'Medicina', 10, 40, 880)
-ads = Curso(4, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
+matematica_unesa = Curso(1, 'Matemática', 5, 40, 560)
+medicina_unesa = Curso(2, 'Medicina', 10, 40, 880)
+ads_unesa = Curso(3, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
+quimica_unesa = Curso(4, ' Química', 400, 40, 700 )
 
-quimica = Curso(3, ' Química', 400, 40, 700 )
-ads = Curso(4, 'Análise e Desenvolvimento de Sistemas', 250, 50, 780)
-medicina = Curso(5, 'Medicina', 600, 40, 850)
-administracao = Curso(6, 'Administração', 550, 35, 700)
-fisica = Curso(7, 'Física', 350, 30, 600)
 print(matematica, portugues, quimica, ads, medicina, administracao)
 ######################################################################
 #Cadastrando os cursos
@@ -241,4 +240,4 @@ unesa.cadastrar_curso(matematica)
 unesa.cadastrar_curso(ads)
 unesa.cadastrar_curso(medicina)
 #############################################
-#
+# Efetivando Matricula
