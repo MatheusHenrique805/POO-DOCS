@@ -34,7 +34,7 @@ class Aluno:
         return self.__pont_enem
 
     def solicitar_entrada(self,curso,universidade):
-        if universidade.tipo == 'publica' and self.matricula_uni_publica != None:
+        if universidade.tipo == 'publica' and self.matricula_uni_publica != True:
             if self.pont_enem > curso.nota_corte:
                 self.__matricula_uni_publica = True
                 print(f'Solicitação Aceita!')
@@ -59,7 +59,13 @@ class Aluno:
                 print(f'Matricula efetivada!')
             else:
                 print(f'O curso escolhido não possui mais vagas.')        
-        
+
+    '''- solicita_transferencia(self, univ_origem, curso_origem, univ_destino):
+    O objetivo deste método é transferir o aluno para um mesmo curso em outra
+    univerdade. Condição: Verificar se o aluno está matriculado no curso e respectiva
+    universidade. A universidade destino tem que ter o curso e ter vaga. Não precisa checar a
+    pontuação do enem'''
+    
     def solicitar_transferencia(self,univ_ori,curso_ori,univ_dest):
         # Verifica se o aluno está realmente no curso e se esse curso existe na universidade de origem
         if self in curso_ori.alunos and curso_ori in univ_ori.cursos:
@@ -70,6 +76,8 @@ class Aluno:
                 # Verifica se existe vaga no curso
                 if curso.vagas > 0:
                     curso_ori.alunos.remove(self)
+                    curso.cadastrar_aluno(self)
+                    print(f'Transferência realizada com sucesso!')
                     # Adicionar aluno no curso da nova universidade.
                 else:
                     print(f'O curso não possui mais vagas disponíveis.')
@@ -81,7 +89,7 @@ class Aluno:
             print('Informações inválidas. Por favor, verifique se as informações que você inseriu estão corretas.')
 
     def __str__(self):
-        pass
+        return f'Nome do Aluno: {self.nome} \nData de Nascimento: {self.dt_nasc} \nPontuação do Enem: {self.pont_enem}'
     
 class Curso:
     def __init__(self, id_curso, nome, duracao, vagas, nota_corte, alunos):
