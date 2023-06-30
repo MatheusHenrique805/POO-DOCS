@@ -138,15 +138,15 @@ class Curso:
     def buscar_aluno(self, aluno):
         for i in self.alunos:
             if i == aluno:
-                print(i)
+                return f'{i}'
             else:
                 pass
         print(f'Aluno não encontrado.')
             
     def __str__(self):
-        cab = f"\ncurso:{self.__nome} - Relação de alunos:\n"
+        cab = f"\nCurso:{self.__nome} - Relação de alunos: "
         for i in self.alunos:
-            cab += f"\n{i}\n"
+            cab += f"{i}\n"
         return cab.strip("\n")
 
 
@@ -181,8 +181,8 @@ class Universidade:
             print("Erro!")
 
     def buscar_curso(self, curso):
-        for i in self.__curso:
-            if i.curso == curso:
+        for i in self.__cursos:
+            if i == curso:
                 return i
         print(f'Curso não encontrado.')
 
@@ -191,14 +191,15 @@ class Universidade:
 
 
 class Sisu:
-    __universidade = []
+    _universidades = []
 
     def inclui_universidade(universidade):
         if type(universidade) == Universidade:
-            Sisu.__universidades.append(universidade)
+            Sisu._universidades.append(universidade)
+            print('Universidade adicionada ao Sisu.')
 
     def busca_universidade(nome):
-        for i in Sisu.__universidades:
+        for i in Sisu._universidades:
             if i.nome == nome:
                 return i
         return None
@@ -211,13 +212,11 @@ flavio = Aluno(20222110760, "Flávio Leão", "28/10/2001", 625)
 matheus = Aluno(20222110484, "Matheus Henrique", "28/12/2000", 650)
 eduarda = Aluno(20222110808, 'Maria Eduarda', '12/05/2002', 710)
 adriano = Aluno(20222110450, 'Adriano Junior', '11/12/2002', 850)
-print(joao, flavio, matheus)
 #########################################################################
 # Criando os objetos da classe Universidade
 uespi = Universidade("UESPI", "Universidade Estadual do Piauí", "Pública")
 ufpi = Universidade("UFPI", "Universidade Federal do Piauí", "Pública")
 unesa = Universidade("UNESA", "Estácio", "Privada")
-print(uespi, ufpi, unesa)
 #########################################################################
 # Criando os objetos da classe Curso
 # -- UESPI --
@@ -238,6 +237,16 @@ fisica_ufpi = Curso(6, "Física", 5, 30, 650)
 medicina_unesa = Curso(2, "Medicina", 10, 40, 700)
 ads_unesa = Curso(3, "Análise e Desenvolvimento de Sistemas", 3, 50, 750)
 quimica_unesa = Curso(4, " Química", 4, 40, 600)
+
+#########################################################################
+# Incluindo universidades no Sisu
+Sisu.inclui_universidade(uespi)
+Sisu.inclui_universidade(ufpi)
+Sisu.inclui_universidade(unesa)
+# Buscando universidade
+print(Sisu.busca_universidade('Universidade Estadual do Piauí'))
+print(Sisu.busca_universidade('Universidade Federal do Piauí'))
+print(Sisu.busca_universidade('Estácio'))
 #########################################################################
 # Cadastrando os cursos
 uespi.cadastrar_curso(matematica_uespi)
@@ -283,6 +292,9 @@ eduarda.solicitar_transferencia(ufpi, administracao_ufpi, uespi)
 matematica_ufpi.buscar_aluno(joao)
 medicina_uespi.buscar_aluno(adriano)
 # Buscando aluno que não pertence ao curso
+print()
 matematica_ufpi.buscar_aluno(eduarda)
-
+print()
 #########################################################################
+# Buscando curso
+print(ufpi.buscar_curso(matematica_ufpi))
