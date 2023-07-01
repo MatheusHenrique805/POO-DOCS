@@ -1,3 +1,6 @@
+# João Augusto da Silva de Morais
+# Matheus Henrique de Oliveira Rocha
+
 class Cliente:
     def __init__(self, cpf, nome, idade):
         self.__cpf = cpf
